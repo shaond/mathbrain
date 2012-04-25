@@ -6,12 +6,33 @@ import asciimathml as am
 from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
-from sympy import pi, cse, sqrt, simplify
+from sympy import pi, cse, sqrt, simplify, diff, ln
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
+
+def qLogDifferentiation_template():
+    '''Differeniate log(e) e.g. diff ln(5*x+2)'''
+    first_val = randint(-100,100)
+    second_val = randint(-100,100)
+    question = 'Differentiate ' + tostring(am.parse('ln((%sx%s))' 
+                                                    % (first_val, second_val))) 
+    question += ' with respect to ' + tostring(am.parse('x'))
+
+    steps = []
+    diff_inside = diff(first_val*x+second_val)
+    steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
+                                               (first_val, second_val))))
+    steps.append('This will give %s which goes as numerator' % str(diff_inside))
+    steps.append('%s goes as denominator' % tostring(am.parse('%sx%s' %
+                                               (first_val, second_val))))
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse(str(diff(ln(first_val*x+second_val))))))
+
+    return question, answer
 
 def qSimplifyBinomial_template():
     '''Simplify Binomial e.g. Simplify n^2-25/n-5.'''
@@ -33,7 +54,7 @@ def qSimplifyBinomial_template():
                  ' from denominator and numerator')
     answer = []
     answer.append(steps)
-    answer.append(simplify(numerator/denominator))
+    answer.append(tostring(am.parse(str(simplify(numerator/denominator)))))
 
     return question, answer
 
@@ -62,7 +83,6 @@ def qSignificantFigures_template():
     answer.append(round(val, sig_fig-int(floor(log10(val)))-1))
 
     return question, answer
-
 
 def qInequalities_template():
     '''Solve inequalities. e.g. 2-3x <= 8.'''
@@ -156,6 +176,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qLogDifferentiation_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qSimplifyBinomial_template()
     questions.append(q)
