@@ -6,38 +6,35 @@ import asciimathml as am
 from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
+from sympy import pi
+from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
-from math import pow
+from math import pow, log10, floor
 
 def qSignificantFigures_template():
-    '''Solve inequalities. e.g. 2-3x <= 8.'''
-    leftside_section1 = randint(-100,100)
-    leftside_section2 = randint(-100,100)
-    left_side = leftside_section1 + leftside_section2
-    right_side = randint(-100,100)
-    equality_type = randint(0,3) #<, <=, >, >=
-    question = None 
-    if equality_type == 0:
-        question = Lt(leftside_section1 + leftside_section2*x, right_side)
-    elif equality_type == 1:
-        question = Le(leftside_section1 + leftside_section2*x, right_side)
-    elif equality_type == 2:
-        question = Gt(leftside_section1 + leftside_section2*x, right_side)
-    elif equality_type == 3:
-        question = Ge(leftside_section1 + leftside_section2*x, right_side)
+    '''Significant figures. e.g. Evaluate cuberoot(651/3*pi) to 5 sig fig.'''
+    sig_fig = randint(2,5)
+    root_val = randint(2,5)
+    numerator = randint(1,1000)
+    denom = randint(1,1000)
+    print root((100/pi).evalf(), root_val)
+    question = 'Evaluate ' +  mathml(nthroot(numerator/(denom*pi), root_val))
+    #question = 'Evaluate ' +  mathml(nthroot(numerator/(denom*pi), root_val)) +\
+    #           'to ' + str(sig_fig) + 'significant figures.'
+    val = nthroot(numerator/(denom*pi), root_val) 
+
     steps = []
-    if leftside_section1 < 0:
-        steps.append('Move by +' + str(leftside_section1*-1) + ' to both ' \
-                     +'sides')
-    else:
-        steps.append('Move by -' + str(leftside_section1) + ' to both ' \
-                     +'sides')
-    steps.append('Divide left and right side by ' + str(leftside_section2))
+    steps.append('This has to be done with a calculator.')
+    steps.append('Do the inside calucation first: ' + str(numerator) +
+                 tostring(am.parse('/')) + str(denom) + tostring(am.parse('*'))
+                 + str(amp.parse(pi)))
+    steps.append('This should give: ' + str(numerator/(denom*pi)))
+    steps.append('Then use 1/y key on calculator and press :' + str(root_val))
     answer = []
     answer.append(steps)
-    answer.append(solve(question, x))
+    answer.append(round(val, sig-int(floor(log10(val)))-1))
 
     return question, answer
 
