@@ -59,7 +59,7 @@ def qInequalities_template():
         question = Gt(leftside_section1 + leftside_section2*x, right_side)
     elif equality_type == 3:
         question = Ge(leftside_section1 + leftside_section2*x, right_side)
-    question_str += mathml(question)
+    question_str += tostring(am.parse(str(question)))
 
     steps = []
     if leftside_section1 < 0:
@@ -81,7 +81,7 @@ def qExponentialSameBase_template():
     pow_rs = randint(3,6)
     rs = int(pow(base,pow_rs))
     lspow = randint(-10,10)*x+randint(-100,100)
-    question = tostring(am.parse('%s^(%s)' % (base, lspow)))
+    question = tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
 
     steps = []
     steps.append('Covert right side to be same base as left side - left side' \
@@ -97,18 +97,31 @@ def qExponentialSameBase_template():
     return question, answer
 
 
+def render_question_paper(q, a):
+    '''Generates the final question paper & answer sheet.'''
+    env = Environment(loader=PackageLoader('mathbrain', 'templates'))
+    template_questions = env.get_template('template_questions.html')
+    template_answers = env.get_template('template_answers.html')
+    print template_questions.render(questions=q)
+    # print template_answers.render(answers=a)
+
+
 def main():
     '''Generating a template'''
-    question = []
-    answer = []
+
+    questions = []
+    answers = []
+
     q, a = qExponentialSameBase_template()
-    question.append(q)
-    answer.append(a)
+    questions.append(q)
+    answers.append(a)
+
     q, a = qInequalities_template()
-    question.append(q)
-    answer.append(a)
-    print question
-    print answer
+    questions.append(q)
+    answers.append(a)
+
+    render_question_paper(questions, answers)
+
     
 
 if __name__ == '__main__':
