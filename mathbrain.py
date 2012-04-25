@@ -6,7 +6,7 @@ import asciimathml as am
 from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
-from sympy import pi
+from sympy import pi, cse, sqrt
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
@@ -14,16 +14,17 @@ from random import choice, randint
 from math import pow, log10, floor
 
 def qSignificantFigures_template():
-    '''Significant figures. e.g. Evaluate cuberoot(651/3*pi) to 5 sig fig.'''
+    '''Significant figures. e.g. Evaluate cuberoot(651/3) to 5 sig fig.'''
     sig_fig = randint(2,5)
     root_val = randint(2,5)
     numerator = randint(1,1000)
     denom = randint(1,1000)
-    print root((100/pi).evalf(), root_val)
-    question = 'Evaluate ' +  mathml(nthroot(numerator/(denom*pi), root_val))
+    #val = cse(sqrt((numerator/denom)))
+    #print val
+    question = 'Evaluate ' +  tostring(am.parse(val)) + ' to ' 
+    question += str(sig_fig) + ' Significant Figures.'
     #question = 'Evaluate ' +  mathml(nthroot(numerator/(denom*pi), root_val)) +\
     #           'to ' + str(sig_fig) + 'significant figures.'
-    val = nthroot(numerator/(denom*pi), root_val) 
 
     steps = []
     steps.append('This has to be done with a calculator.')
@@ -108,6 +109,10 @@ def main():
 
     questions = []
     answers = []
+
+    #q, a = qSignificantFigures_template()
+    #questions.append(q)
+    #answers.append(a)
 
     q, a = qExponentialSameBase_template()
     questions.append(q)
