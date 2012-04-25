@@ -19,14 +19,15 @@ def qSimplifyBinomial_template():
     pow_base = pow(base, 2)
     numerator = x**2-int(pow_base)
     denominator = x-base
-    question = 'Simplify ' + tostring(am.parse('(x^2-%s)/(x-%s)' % (pow_base, base)))
+    question = 'Simplify ' + tostring(am.parse('(x^2-%s)/(x-%s)' %
+                                               (int(pow_base), base)))
 
     steps = []
     steps.append('Covert numerator to binomial to match denominator.')
-    binomial = tostring(am.parse('x^2-%s' % (pow_base)))
+    binomial = tostring(am.parse('x^2-%s' % (int(pow_base))))
     expanded_binomial = tostring(am.parse('(x-%s)(x+%s)' % (base,base)))
     steps.append('As '+ binomial + ' is the same as ' + expanded_binomial)
-    steps.append('Therefore ' + tostring(am.parse('(x-%s)(x+%s)/x-%s' %
+    steps.append('Therefore ' + tostring(am.parse('((x-%s)(x+%s))/(x-%s)' %
                                                   (base,base,base))))
     steps.append('Cancel '+ tostring(am.parse('(x-%s)' %(base))) + 
                  ' from denominator and numerator')
@@ -118,9 +119,9 @@ def qExponentialSameBase_template():
     # TODO there's a bug here.
     # TypeError: object of type 'bool' has no len()
     if len(solve(Eq(lspow, rs))) > 1:
-        answer.append(solve(Eq(lspow, rs))[0])
+        answer.append(tostring(am.parse('x = %s' % solve(Eq(lspow, rs))[0])))
     else:
-        answer.append(solve(Eq(lspow, rs)))
+        answer.append(tostring(am.parse('x = %s' % solve(Eq(lspow, rs))[0])))
 
     return question, answer
 
