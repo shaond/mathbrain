@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block questionpaper %}
     <p>There are {{questions|length}} questions in this paper.</p>
-    <ol>
     {% for question in questions %}
-        <li>{{ question }}</li>
+    <div class="question">
+        <p>{{ question }}</p>
+    </div>
     {% endfor %}
-    </ol>
 {% endblock questionpaper %}
