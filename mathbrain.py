@@ -19,7 +19,7 @@ def qSimplifyBinomial_template():
     pow_base = pow(base, 2)
     numerator = x**2-int(pow_base)
     denominator = x-base
-    question = 'Simplify ' + tostring(am.parse('x^2-%s/x-%s' % (pow_base, base)))
+    question = 'Simplify ' + tostring(am.parse('(x^2-%s)/(x-%s)' % (pow_base, base)))
 
     steps = []
     steps.append('Covert numerator to binomial to match denominator.')
