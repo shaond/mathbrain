@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block questionpaper %}
-    {% for answer in answers %}
-        {% for step in answer %}
+    <ol>
+    {% for step in steps %}
         <li>{{ step }}</li>
-        {% endfor %}
     {% endfor %}
+        <li>{{ solution }}</li>
+    </ol>
 {% endblock questionpaper %}

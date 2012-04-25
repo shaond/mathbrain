@@ -85,9 +85,10 @@ def qInequalities_template():
         steps.append('Move by -' + str(leftside_section1) + ' to both ' \
                      +'sides')
     steps.append('Divide left and right side by ' + str(leftside_section2))
+
     answer = []
     answer.append(steps)
-    answer.append(mathml(solve(question, x)))
+    answer.append(str(solve(question, x)))
 
     return question_str, answer
 
@@ -108,7 +109,13 @@ def qExponentialSameBase_template():
                                                         (lspow,'=',rs)))) 
     answer = []
     answer.append(steps)
-    answer.append(solve(Eq(lspow, rs))[0])
+
+    # TODO there's a bug here.
+    # TypeError: object of type 'bool' has no len()
+    if len(solve(Eq(lspow, rs))) > 1:
+        answer.append(solve(Eq(lspow, rs))[0])
+    else:
+        answer.append(solve(Eq(lspow, rs)))
 
     return question, answer
 
@@ -118,9 +125,27 @@ def render_question_paper(q, a):
     env = Environment(loader=PackageLoader('mathbrain', 'templates'))
     template_questions = env.get_template('template_questions.html')
     template_answers = env.get_template('template_answers.html')
-    print template_questions.render(questions=q)
-    # print template_answers.render(answers=a)
+    
+    try:
+        questions_html = open('questions.html', 'w')
+        answers_html = open('answers.html', 'w')
 
+        # Generate our question paper.
+        questions_html.write(template_questions.render(questions=q))
+
+        # Extract the solution and all working our steps.
+        steps = a[0]
+        solution = a[1]
+        answers_html.write(template_answers.render(steps=steps,
+            solution=solution))
+
+        # Close open files.
+        questions_html.close()
+        answers_html.close()
+    except IOError as (errno, strerr):
+        sys.exit("IOError (%d): %s".format(errno, strerr))
+
+    # print a
 
 def main():
     '''Generating a template'''

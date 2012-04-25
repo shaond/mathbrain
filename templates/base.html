@@ -3,7 +3,11 @@
     {% block head %}
     <head><title>{% block title %}{% endblock title %} Mathbrain</title></head>
     {% endblock head %}
-    {% block style %}{% endblock style %}
+    {% block style %}
+    <style type="text/css">
+        body { font: large "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif; } 
+    </style>
+    {% endblock style %}
 <body>
     <div id="body">
         {% block questionpaper %}
