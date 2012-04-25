@@ -141,8 +141,7 @@ def render_question_paper(q, a):
         # Extract the solution and all working our steps.
         steps = a[0]
         solution = a[1]
-        answers_html.write(template_answers.render(steps=steps,
-            solution=solution))
+        answers_html.write(template_answers.render(answers=a))
 
         # Close open files.
         questions_html.close()
@@ -150,7 +149,6 @@ def render_question_paper(q, a):
     except IOError as (errno, strerr):
         sys.exit("IOError (%d): %s".format(errno, strerr))
 
-    # print a
 
 def main():
     '''Generating a template'''

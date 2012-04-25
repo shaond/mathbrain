@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 {% block questionpaper %}
-    <ol>
-    {% for step in steps %}
-        <li>{{ step }}</li>
-    {% endfor %}
+<p>There are {{answers|count}} answers. The working out is represented below.
+    {% for steps, solution in answers %}
+    <div class="answer">
+        <h3></h3>
+    <ul>
+        {% for step in steps %}
+            <li>{{ step }}</li>
+        {% endfor %}
         <li>{{ solution }}</li>
-    </ol>
+    </ul>
+    </div>
+    {% endfor %}
 {% endblock questionpaper %}
