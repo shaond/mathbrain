@@ -77,21 +77,23 @@ def qInequalities_template():
 
 def qExponentialSameBase_template():
     '''Solves the same base e.g. 2^(2x+1) = 32.'''
-    env = Environment(loader=PackageLoader('mathbrain', 'templates'))
-    template = env.get_template('template.html')
-    from random import choice, randint
-    from math import pow
     base = choice([2,3,5,7])
     pow_rs = randint(3,6)
     rs = int(pow(base,pow_rs))
-    lspow = '2x+1'
-    print template.render(leftside=tostring(am.parse('%s^(%s)' % (base, lspow))),
-                          equality=tostring(am.parse('=')), 
-                          rightside=tostring(am.parse('%s' % rs)),
-                          lspow=tostring(am.parse(lspow)),
-                          samebase_rightside=tostring(am.parse('%s^(%s)' %
-                              (base,pow_rs))),
-                          rs_pow = tostring(am.parse('%s' % pow_rs)))
+    lspow = randint(-10,10)*x+randint(-100,100)
+    question = tostring(am.parse('%s^(%s)' % (base, lspow)))
+
+    steps = []
+    steps.append('Covert right side to be same base as left side - left side' \
+                  ' is base ' + str(base))
+    steps.append('Right side is now: ' + tostring(am.parse('%s^(%s)' % 
+                                                           (base, rs))))
+    steps.append('Therefore solve ' + tostring(am.parse('%s%s%s' %
+                                                        (lspow,'=',rs)))) 
+    answer = []
+    answer.append(steps)
+    answer.append(solve(Eq(lspow, rs))[0])
+
     return question, answer
 
 
@@ -99,9 +101,9 @@ def main():
     '''Generating a template'''
     question = []
     answer = []
-    #q, a = qExponentialSameBase_template()
-    #question.append(q)
-    #answer.append(a)
+    q, a = qExponentialSameBase_template()
+    question.append(q)
+    answer.append(a)
     q, a = qInequalities_template()
     question.append(q)
     answer.append(a)
