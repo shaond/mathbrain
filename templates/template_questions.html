@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block question-paper %}
+    {% for question in questions %}
+    <li>{{ question }}</li>
+    {% endfor %}
+{% endblock question-paper %}
