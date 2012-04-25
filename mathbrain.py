@@ -6,12 +6,30 @@ import asciimathml as am
 from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
-from sympy import pi, cse, sqrt
+from sympy import pi, cse, sqrt, simplify
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
+
+def qSimplifyBinomial_template():
+    '''Simplify Binomial e.g. Simplify n^2-25/n-5.'''
+    base = choice([2,3,5,7])
+    pow_base = randint(3,6)
+    numerator = x**2-pow_base
+    denominator = x-pow_base
+    bin_equation = exp((numerator)/(denominator))
+    question = 'Simplify' + tostring(am.parse('x^2-%s/x-%s' % (pow_base, base)))
+
+    steps = []
+    steps.append('Covert numerator to binomial to match denominator.')
+    steps.append('As '+ str(base))
+    answer = []
+    answer.append(steps)
+    answer.append(simplify(bin_equation))
+
+    return question, answer
 
 def qSignificantFigures_template():
     '''Significant figures. e.g. Evaluate cuberoot(651/3) to 5 sig fig.'''
