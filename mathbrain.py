@@ -16,18 +16,23 @@ from math import pow, log10, floor
 def qSimplifyBinomial_template():
     '''Simplify Binomial e.g. Simplify n^2-25/n-5.'''
     base = choice([2,3,5,7])
-    pow_base = randint(3,6)
-    numerator = x**2-pow_base
-    denominator = x-pow_base
-    bin_equation = exp((numerator)/(denominator))
-    question = 'Simplify' + tostring(am.parse('x^2-%s/x-%s' % (pow_base, base)))
+    pow_base = pow(base, 2)
+    numerator = x**2-int(pow_base)
+    denominator = x-base
+    question = 'Simplify ' + tostring(am.parse('x^2-%s/x-%s' % (pow_base, base)))
 
     steps = []
     steps.append('Covert numerator to binomial to match denominator.')
-    steps.append('As '+ str(base))
+    binomial = tostring(am.parse('x^2-%s' % (pow_base)))
+    expanded_binomial = tostring(am.parse('(x-%s)(x+%s)' % (base,base)))
+    steps.append('As '+ binomial + ' is the same as ' + expanded_binomial)
+    steps.append('Therefore ' + tostring(am.parse('(x-%s)(x+%s)/x-%s' %
+                                                  (base,base,base))))
+    steps.append('Cancel '+ tostring(am.parse('(x-%s)' %(base))) + 
+                 ' from denominator and numerator')
     answer = []
     answer.append(steps)
-    answer.append(simplify(bin_equation))
+    answer.append(simplify(numerator/denominator))
 
     return question, answer
 
@@ -152,6 +157,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qSimplifyBinomial_template()
+    questions.append(q)
+    answers.append(a)
 
     #q, a = qSignificantFigures_template()
     #questions.append(q)
