@@ -43,23 +43,23 @@ def qSignificantFigures_template():
     root_val = randint(2,5)
     numerator = randint(1,1000)
     denom = randint(1,1000)
-    #val = cse(sqrt((numerator/denom)))
-    #print val
-    question = 'Evaluate ' +  tostring(am.parse(val)) + ' to ' 
-    question += str(sig_fig) + ' Significant Figures.'
-    #question = 'Evaluate ' +  mathml(nthroot(numerator/(denom*pi), root_val)) +\
-    #           'to ' + str(sig_fig) + 'significant figures.'
+    val = 'root%s(%s/(%s*pi))' % (root_val, numerator, denom)
+    question = 'Evaluate ' +  tostring(am.parse(val)) + ' to %s' % (sig_fig)
+    question += ' Significant Figures.'
 
     steps = []
+    inside_root = (numerator/(denom*pi)).evalf() 
+    val = root(inside_root, root_val)
     steps.append('This has to be done with a calculator.')
-    steps.append('Do the inside calucation first: ' + str(numerator) +
-                 tostring(am.parse('/')) + str(denom) + tostring(am.parse('*'))
-                 + str(amp.parse(pi)))
-    steps.append('This should give: ' + str(numerator/(denom*pi)))
-    steps.append('Then use 1/y key on calculator and press :' + str(root_val))
+    steps.append('Do the inside calucation first: ' + 
+                 tostring(am.parse('%s/(%s*pi)'%(numerator,denom))) + tostring(am.parse('*'))
+                 + str(am.parse('pi')))
+    steps.append('This should give ' + tostring(am.parse(str(inside_root))))
+    steps.append('Then use 1/y key on calculator and press ' + str(root_val))
+    steps.append('Then get the value to %s significant figures.' % sig_fig)
     answer = []
     answer.append(steps)
-    answer.append(round(val, sig-int(floor(log10(val)))-1))
+    answer.append(round(val, sig_fig-int(floor(log10(val)))-1))
 
     return question, answer
 
@@ -161,9 +161,9 @@ def main():
     questions.append(q)
     answers.append(a)
 
-    #q, a = qSignificantFigures_template()
-    #questions.append(q)
-    #answers.append(a)
+    q, a = qSignificantFigures_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qExponentialSameBase_template()
     questions.append(q)
