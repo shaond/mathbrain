@@ -139,6 +139,8 @@ def qExpDifferentiation_template():
 def qLogDifferentiation_template():
     '''Differeniate log(e) e.g. diff ln(5*x+2)'''
     first_val = randint(-100,100)
+    while first_val == 0:
+        first_val = randint(-100,100)
     second_val = randint(-100,100)
     if second_val < 0:
         question = 'Differentiate ' + tostring(am.parse('ln((%sx%s))' 
@@ -151,8 +153,6 @@ def qLogDifferentiation_template():
     question += ' with respect to ' + tostring(am.parse('x'))
 
     steps = []
-    # TODO there's a bug here.
-    # ValueErorr: specify differentiation variables to differentiate 86
     diff_inside = diff(first_val*x+second_val)
     steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
                                                (first_val, second_val))))
@@ -254,7 +254,7 @@ def qExponentialSameBase_template():
     base = choice([2,3,5,7])
     pow_rs = randint(3,6)
     rs = int(pow(base,pow_rs))
-    lspow = randint(-10,10)*x+randint(-100,100)
+    lspow = randint(-100,100)*x+randint(-100,100)
     question = tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
 
     steps = []
