@@ -6,7 +6,7 @@ import asciimathml as am
 from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
-from sympy import pi, cse, sqrt, simplify, diff, ln
+from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
@@ -16,24 +16,80 @@ from math import pow, log10, floor
 def qGrpDifferentiation_template():
     '''Group Differentiation  e.g. diff x^2*e^x'''
     #TODO: Need to make this more random selection
+    #TODO: tan not working. It's supposed to give sec^2 as answer
     type_diff1 = randint(0,3) #normal,exp,trig,log
     type_diff2 = randint(0,3) #normal,exp,trig,log
-    first_val = randint(-100,100)
-    second_val = randint(-100,100)
-    question = 'Differentiate ' + tostring(am.parse('ln((%sx%s))' 
-                                                    % (first_val, second_val))) 
+    first_part =  None
+    second_part =  None
+
+    if type_diff1 == 0:
+        first_part = exp(x**(randint(2,100)) + randint(-100,100))
+    elif type_diff1 == 1:
+        first_part = exp(x**(randint(2,100)) + randint(-100,100))
+    elif type_diff1 == 2:
+        #TODO BUG: tan NOT giveing right values
+        #sohcahtoa_type = randint(0,2) #Sine,Cosine,Tan
+        sohcahtoa_type = randint(0,1) #Sine,Cosine
+        if sohcahtoa_type == 0:
+            first_part = sin(x**(randint(2,100))+randint(-100,100))
+        if sohcahtoa_type == 1:
+            first_part = cos(x**(randint(2,100))+randint(-100,100))
+        if sohcahtoa_type == 2:
+            first_part = tan(x**(randint(2,100))+randint(-100,100))
+    elif type_diff1 == 3:
+        first_part = ln((randint(2,100)*x+randint(-100,100)))
+
+    if type_diff2 == 0:
+        second_part = exp(x**(randint(2,100)) + randint(-100,100))
+    elif type_diff2 == 1:
+        second_part = exp(x**(randint(2,100)) + randint(-100,100))
+    elif type_diff2 == 2:
+        #TODO BUG: tan NOT giveing right values
+        #sohcahtoa_type = randint(0,2) #Sine,Cosine,Tan
+        sohcahtoa_type = randint(0,1) #Sine,Cosine
+        if sohcahtoa_type == 0:
+            second_part = sin(x**(randint(2,100))+randint(-100,100))
+        if sohcahtoa_type == 1:
+            second_part = cos(x**(randint(2,100))+randint(-100,100))
+        if sohcahtoa_type == 2:
+            second_part = tan(x**(randint(2,100))+randint(-100,100))
+    elif type_diff2 == 3:
+        second_part = ln((randint(2,100)*x+randint(-100,100)))
+    first_part_str = str(first_part).replace("exp","e^").replace("log", "ln").replace("**", "^").replace("(", "((").replace(")", "))")
+    second_part_str = str(second_part).replace("exp","e^").replace("log","ln").replace("**","^").replace("(", "((").replace(")", "))")
+    question = 'Differentiate ' + tostring(am.parse('%s*%s' 
+                                                    % (first_part_str, 
+                                                       second_part_str))) 
     question += ' with respect to ' + tostring(am.parse('x'))
 
     steps = []
-    diff_inside = diff(first_val*x+second_val)
-    steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
-                                               (first_val, second_val))))
-    steps.append('This will give %s which goes as numerator' % str(diff_inside))
-    steps.append('%s goes as denominator' % tostring(am.parse('%sx%s' %
-                                               (first_val, second_val))))
+    first_part_diff = diff(first_part)
+    second_part_diff = diff(second_part)
+    first_part_diffstr = str(first_part_diff).replace("exp","e^").replace("log", "ln").replace("**", "^").replace("(", "((").replace(")", "))")
+    second_part_diffstr = str(second_part_diff).replace("exp","e^").replace("log","ln").replace("**","^").replace("(", "((").replace(")", "))")
+    steps.append('This is a group differentiation')
+    steps.append('Differentiate %s and multiply it to %s' %
+                 (tostring(am.parse(first_part_str)),
+                  tostring(am.parse(second_part_str))))
+    steps.append('This will give %s%s  -> part (a)' %
+                 (tostring(am.parse(first_part_diffstr)),
+                 tostring(am.parse(second_part_str))))
+    steps.append('This will give %s%s  -> part (b)' %
+                 (tostring(am.parse(second_part_diffstr)),
+                 tostring(am.parse(first_part_str))))
+    steps.append('Add part(a) and (b) together')
     answer = []
     answer.append(steps)
-    answer.append(tostring(am.parse(str(diff(ln(first_val*x+second_val))))))
+    if second_part_diffstr[0] == '-':
+        answer.append(tostring(am.parse('%s%s%s%s' % (first_part_diffstr,
+                                                      second_part_str,
+                                                      second_part_diffstr,
+                                                      first_part_str))))
+    else:
+        answer.append(tostring(am.parse('%s%s+%s%s' % (first_part_diffstr,
+                                                       second_part_str,
+                                                       second_part_diffstr,
+                                                       first_part_str))))
 
     return question, answer
 
@@ -251,6 +307,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qGrpDifferentiation_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qExpDifferentiation_template()
     questions.append(q)
