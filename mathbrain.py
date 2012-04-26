@@ -254,7 +254,10 @@ def qExponentialSameBase_template():
     base = choice([2,3,5,7])
     pow_rs = randint(3,6)
     rs = int(pow(base,pow_rs))
-    lspow = randint(-10,10)*x+randint(-100,100)
+    front_num = randint(-100,100)
+    while front_num == 0:
+        front_num = randint(-100,100)
+    lspow = front_num*x+randint(-100,100)
     question = tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
 
     steps = []
@@ -267,9 +270,6 @@ def qExponentialSameBase_template():
     answer = []
     answer.append(steps)
 
-    # TODO there's a bug here.
-    # TypeError: object of type 'bool' has no len()
-    print lspow, rs
     if len(solve(Eq(lspow, rs))) > 1:
         answer.append(tostring(am.parse('x = %s' % solve(Eq(lspow, rs))[0])))
     else:
