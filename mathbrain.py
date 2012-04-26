@@ -13,8 +13,11 @@ from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
 
-def qLogDifferentiation_template():
-    '''Differeniate log(e) e.g. diff ln(5*x+2)'''
+def qGrpDifferentiation_template():
+    '''Group Differentiation  e.g. diff x^2*e^x'''
+    #TODO: Need to make this more random selection
+    type_diff1 = randint(0,3) #normal,exp,trig,log
+    type_diff2 = randint(0,3) #normal,exp,trig,log
     first_val = randint(-100,100)
     second_val = randint(-100,100)
     question = 'Differentiate ' + tostring(am.parse('ln((%sx%s))' 
@@ -22,6 +25,78 @@ def qLogDifferentiation_template():
     question += ' with respect to ' + tostring(am.parse('x'))
 
     steps = []
+    diff_inside = diff(first_val*x+second_val)
+    steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
+                                               (first_val, second_val))))
+    steps.append('This will give %s which goes as numerator' % str(diff_inside))
+    steps.append('%s goes as denominator' % tostring(am.parse('%sx%s' %
+                                               (first_val, second_val))))
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse(str(diff(ln(first_val*x+second_val))))))
+
+    return question, answer
+
+def qExpDifferentiation_template():
+    '''Differeniate exponential e.g. diff e^(2x^3+2)'''
+    rand_power = randint(2,100) #Can't do -ve as this is calculated differently
+    front_num = randint(-100,100)
+    while front_num == 0:
+        front_num = randint(-100,100)
+    end_num = randint(-100,100)
+    while front_num == 0:
+        end_num = randint(-100,100)
+    if end_num < 0:
+        question = 'Differentiate ' + tostring(am.parse('e^(%sx^(%s)%s)' 
+                                                        % (front_num,
+                                                           rand_power,
+                                                           end_num)))
+    else:
+        question = 'Differentiate ' + tostring(am.parse('e^(%sx^(%s)+%s)' 
+                                                        % (front_num,
+                                                           rand_power,
+                                                           end_num)))
+    question += ' with respect to ' + tostring(am.parse('x'))
+
+    steps = []
+    diff_top = diff(front_num*x**(rand_power)+end_num)
+    if end_num < 0:
+        steps.append('Differentiate %s normally' % tostring(am.parse('%sx^(%s)%s' 
+                                                                     % (front_num, 
+                                                                        rand_power,
+                                                                        end_num))))
+    else:
+        steps.append('Differentiate %s normally' % tostring(am.parse('%sx^(%s)+%s' 
+                                                                     % (front_num, 
+                                                                        rand_power,
+                                                                        end_num))))
+    steps.append('This will give %s which goes at front of original question' 
+                 % tostring(am.parse(str(diff_top).replace("**","^"))))
+    answer = []
+    answer.append(steps)
+    diff_val = diff(exp(front_num*x**(rand_power)+end_num))
+    answer.append(tostring(am.parse(str(diff_val).replace("**","^").
+                                   replace("exp", "e^"))))
+
+    return question, answer
+
+def qLogDifferentiation_template():
+    '''Differeniate log(e) e.g. diff ln(5*x+2)'''
+    first_val = randint(-100,100)
+    second_val = randint(-100,100)
+    if second_val < 0:
+        question = 'Differentiate ' + tostring(am.parse('ln((%sx%s))' 
+                                                        % (first_val, 
+                                                           second_val))) 
+    else:
+        question = 'Differentiate ' + tostring(am.parse('ln((%sx+%s))' 
+                                                        % (first_val, 
+                                                           second_val))) 
+    question += ' with respect to ' + tostring(am.parse('x'))
+
+    steps = []
+    # TODO there's a bug here.
+    # ValueErorr: specify differentiation variables to differentiate 86
     diff_inside = diff(first_val*x+second_val)
     steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
                                                (first_val, second_val))))
@@ -176,6 +251,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qExpDifferentiation_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qLogDifferentiation_template()
     questions.append(q)
