@@ -16,9 +16,9 @@ from math import pow, log10, floor
 
 def qRationaliseDenominator_template():
     '''Ratoinalise Denominator e.g. Rataionlise 4/(root(4)-root(5))'''
-    numerator = choice([2,4,6,8,16,20,32])
-    first_root = choice([2,4,6,8,16,20,32])
-    second_root = choice([2,4,6,8,16,20,32])
+    numerator = choice([2,3,5,6,7,8,10,11,20,32])
+    first_root = choice([2,3,5,6,7,8,10,11,20,32])
+    second_root = choice([2,3,5,6,7,8,10,11,20,32])
     #first_root = randint(2,20)
     #second_root = randint(2,20)
     if second_root == first_root:
@@ -46,13 +46,40 @@ def qRationaliseDenominator_template():
     step_multiply = tostring(am.parse('(sqrt%s%ssqrt%s)/(sqrt%s%ssqrt%s)' 
                                       % (first_root, opp_val, second_root,
                                          first_root, opp_val, second_root)))
+    comb_step = tostring(am.parse('(%s*(sqrt%s%ssqrt%s))/((sqrt%s%ssqrt%s) \
+                                  (sqrt%s%ssqrt%s))' % (numerator, 
+                                                        first_root, 
+                                                        opp_val,
+                                                        second_root, 
+                                                        first_root, 
+                                                        type_val, 
+                                                        second_root, 
+                                                        first_root, 
+                                                        opp_val, 
+                                                        second_root)))
+    binom_denom = tostring(am.parse('(sqrt%s%ssqrt%s)(sqrt%s%ssqrt%s)' 
+                                    % (first_root, 
+                                       type_val, 
+                                       second_root, 
+                                       first_root, 
+                                       opp_val, 
+                                       second_root)))
+    binom_root = \
+    simplify((sqrt(first_root)+sqrt(second_root))*
+             (sqrt(first_root)-sqrt(second_root)))
+    binom_root_str = tostring(am.parse(str(binom_root)))
+    binom_sq_root = tostring(am.parse('((sqrt%s)^2-(sqrt%s)^2) =' 
+                                      % (first_root, second_root)))
+    binom_sq_root_solv = tostring(am.parse('(%s-%s) =' % (first_root, 
+                                                          second_root)))
     steps.append('Multiply both numerator and denominator by %s' % step_print) 
     steps.append('Meaning %s %s %s' % (question_print,
                                            tostring(am.parse('*')),
                                            step_multiply))
-    #steps.append('Resulting in %s' % (question_print,
-    #                                       tostring(am.parse('*')),
-    #                                       step_multiply))
+    steps.append('Resulting in %s' % comb_step)
+    steps.append('Note %s' % tostring(am.parse('(a+b)(a-b) = a^2-b^2')))
+    steps.append('Therefore denominator %s becomes %s %s %s' 
+                 % (binom_denom, binom_sq_root, binom_sq_root_solv, binom_root_str))
     answer = []
     answer.append(steps)
     ans_val = None
@@ -61,6 +88,7 @@ def qRationaliseDenominator_template():
     else:
         ans_val = radsimp(numerator/(sqrt(first_root)+sqrt(second_root)))
     ans_val = together(ans_val)
+    #print ans_val
     answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
 
     return question, answer
