@@ -7,11 +7,63 @@ from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
 from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan
+from sympy import radsimp, factor, together, Symbol
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
+
+def qRationaliseDenominator_template():
+    '''Ratoinalise Denominator e.g. Rataionlise 4/(root(4)-root(5))'''
+    numerator = choice([2,4,6,8,16,20,32])
+    first_root = choice([2,4,6,8,16,20,32])
+    second_root = choice([2,4,6,8,16,20,32])
+    #first_root = randint(2,20)
+    #second_root = randint(2,20)
+    if second_root == first_root:
+        second_root = choice([2,4,6,8,16,20])
+    type_denom = randint(0,1) #Either + or -
+    type_val = None
+    opp_val = None
+    if not type_denom:
+        type_val, opp_val = "-", "+"
+    else:
+        type_val, opp_val = "+", "-"
+    question_print = tostring(am.parse('%s/(sqrt%s%ssqrt%s)' 
+                                       % (str(numerator),
+                                          str(first_root),
+                                          str(type_val),
+                                          str(second_root))))
+
+    question = 'Rationalise the denominator of ' + question_print
+    question += '. Give your answer in the simplest form.'
+
+    steps = []
+    step_print = tostring(am.parse('sqrt%s%ssqrt%s' % (first_root,
+                                                       opp_val,
+                                                       second_root)))
+    step_multiply = tostring(am.parse('(sqrt%s%ssqrt%s)/(sqrt%s%ssqrt%s)' 
+                                      % (first_root, opp_val, second_root,
+                                         first_root, opp_val, second_root)))
+    steps.append('Multiply both numerator and denominator by %s' % step_print) 
+    steps.append('Meaning %s %s %s' % (question_print,
+                                           tostring(am.parse('*')),
+                                           step_multiply))
+    #steps.append('Resulting in %s' % (question_print,
+    #                                       tostring(am.parse('*')),
+    #                                       step_multiply))
+    answer = []
+    answer.append(steps)
+    ans_val = None
+    if not type_denom:
+        ans_val = radsimp(numerator/(sqrt(first_root)-sqrt(second_root)))
+    else:
+        ans_val = radsimp(numerator/(sqrt(first_root)+sqrt(second_root)))
+    ans_val = together(ans_val)
+    answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
+
+    return question, answer
 
 def qGrpDifferentiation_template():
     '''Group Differentiation  e.g. diff x^2*e^x'''
@@ -223,6 +275,7 @@ def qInequalities_template():
     right_side = randint(-100,100)
     equality_type = randint(0,3) #<, <=, >, >=
     question = None 
+    x = Symbol('x', real=True) #For 4U Maths use complex=True for ImaginaryNum
     question_str = "Solve : "
     if equality_type == 0:
         question = Lt(leftside_section1 + leftside_section2*x, right_side)
@@ -245,7 +298,7 @@ def qInequalities_template():
 
     answer = []
     answer.append(steps)
-    answer.append(str(solve(question, x)))
+    answer.append(tostring(am.parse(str(solve(question, x)))))
 
     return question_str, answer
 
@@ -308,6 +361,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qRationaliseDenominator_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qGrpDifferentiation_template()
     questions.append(q)
