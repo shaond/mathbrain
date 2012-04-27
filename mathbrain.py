@@ -22,7 +22,7 @@ def qRationaliseDenominator_template():
     second_root = choice([2,3,5,6,7,8,10,11,20,32])
     #first_root = randint(2,20)
     #second_root = randint(2,20)
-    if second_root == first_root:
+    while second_root == first_root:
         second_root = choice([2,4,6,8,16,20])
     type_denom = randint(0,1) #Either + or -
     type_val = None
@@ -95,13 +95,22 @@ def qRationaliseDenominator_template():
     yank_vals = val_regex.findall(str(ans_val))
     for index, item in enumerate(yank_vals):
         yank_vals[index] = re.sub("\*{2}\(1\/2\)", "", str(item))
-    ans_val = match[0] + "sqrt" + yank_vals[0] + match[1] + "sqrt" + \
-    yank_vals[1] + match[2]
+
+    val_regex_neg = re.compile("-")
+    val_neg = val_regex_neg.findall(str(match[0][1:]))
+    if len(val_neg):
+        if val_neg[0] == '-' and match[1] == ' - ':
+            ans_val = "-" + match[0][0] + re.sub("-", "", match[0][1:]) + \
+                    "sqrt" + yank_vals[0] + " + "
+        else:
+            ans_val = match[0] + "sqrt" + yank_vals[0] + match[1]
+    else:
+        ans_val = match[0] + "sqrt" + yank_vals[0] + match[1]
+
+    if len(match) > 2:
+        ans_val += "sqrt" + yank_vals[1] + match[2]
     answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
 
-    #TODO Bug with some answers
-    #e.g. Rationalise 10/(sqrt(3)-sqrt(7)) which gives 5*(-sqrt(7)-sqrt(3))/2
-    #It should be -5*(sqrt(7)+sqrt(3))/2
     return question, answer
 
 def qGrpDifferentiation_template():
