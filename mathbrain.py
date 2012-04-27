@@ -13,6 +13,7 @@ from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
+import re
 
 def qRationaliseDenominator_template():
     '''Ratoinalise Denominator e.g. Rataionlise 4/(root(4)-root(5))'''
@@ -88,9 +89,19 @@ def qRationaliseDenominator_template():
     else:
         ans_val = radsimp(numerator/(sqrt(first_root)+sqrt(second_root)))
     ans_val = together(ans_val)
-    #print ans_val
+    val_regex = re.compile("[0-9]+\*{2}\(1\/2\)")
+    val_regex_yank = re.compile("\*{2}\(1\/2\)")
+    match = val_regex.split(str(ans_val))
+    yank_vals = val_regex.findall(str(ans_val))
+    for index, item in enumerate(yank_vals):
+        yank_vals[index] = re.sub("\*{2}\(1\/2\)", "", str(item))
+    ans_val = match[0] + "sqrt" + yank_vals[0] + match[1] + "sqrt" + \
+    yank_vals[1] + match[2]
     answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
 
+    #TODO Bug with some answers
+    #e.g. Rationalise 10/(sqrt(3)-sqrt(7)) which gives 5*(-sqrt(7)-sqrt(3))/2
+    #It should be -5*(sqrt(7)+sqrt(3))/2
     return question, answer
 
 def qGrpDifferentiation_template():
