@@ -254,11 +254,19 @@ def qLogDifferentiation_template():
 
     steps = []
     diff_inside = diff(first_val*x+second_val)
-    steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
-                                               (first_val, second_val))))
+    if second_val < 0:
+        steps.append('Differentiate %s normally' % tostring(am.parse('%sx%s' %
+                                                   (first_val, second_val))))
+    else:
+        steps.append('Differentiate %s normally' % tostring(am.parse('%sx+%s' %
+                                                   (first_val, second_val))))
     steps.append('This will give %s which goes as numerator' % str(diff_inside))
-    steps.append('%s goes as denominator' % tostring(am.parse('%sx%s' %
-                                               (first_val, second_val))))
+    if second_val < 0:
+        steps.append('%s goes as denominator' % tostring(am.parse('%sx%s' %
+                                                   (first_val, second_val))))
+    else:
+        steps.append('%s goes as denominator' % tostring(am.parse('%sx+%s' %
+                                                   (first_val, second_val))))
     answer = []
     answer.append(steps)
     answer.append(tostring(am.parse(str(diff(ln(first_val*x+second_val))))))
