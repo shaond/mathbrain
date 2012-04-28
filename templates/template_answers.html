@@ -3,13 +3,13 @@
 <p>There are {{answers|count}} answers. The working out is represented below.
     {% for steps, solution in answers %}
     <div class="answer">
-        <h3></h3>
-    <ul>
+        <h3>Answer {{ loop.index }}</h3>
+    <ol>
         {% for step in steps %}
-            <li>{{ step }}</li>
+        <li>Step {{ loop.index }}: {{ step }}</li>
         {% endfor %}
-        <li>{{ solution }}</li>
-    </ul>
+        <li>Finally: {{ solution }}</li>
+    </ol>
     </div>
     {% endfor %}
 {% endblock questionpaper %}
