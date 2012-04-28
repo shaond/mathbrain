@@ -341,7 +341,7 @@ def qInequalities_template():
     equality_type = randint(0,3) #<, <=, >, >=
     question = None 
     x = Symbol('x', real=True) #For 4U Maths use complex=True for ImaginaryNum
-    question_str = "Solve : "
+    question_str = "Solve "
     if equality_type == 0:
         question = Lt(leftside_section1 + leftside_section2*x, right_side)
     elif equality_type == 1:
@@ -376,7 +376,7 @@ def qExponentialSameBase_template():
     while front_num == 0:
         front_num = randint(-100,100)
     lspow = front_num*x+randint(-100,100)
-    question = tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
+    question = 'Solve ' + tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
     ls_samebase = tostring(am.parse('%s^(%s)' % (base, lspow)))
     rs_samebase = tostring(am.parse('%s^(%s)' % (base, pow_rs)))
     steps = []
