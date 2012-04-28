@@ -173,10 +173,13 @@ def qGrpDifferentiation_template():
                   tostring(am.parse(second_part_str))))
     steps.append('This will give %s%s  -> part (a)' %
                  (tostring(am.parse(first_part_diffstr)),
-                 tostring(am.parse(second_part_str))))
+                 tostring(am.parse('*'+second_part_str))))
+    steps.append('Similarly, differentiate %s and multiply it to %s' %
+                 (tostring(am.parse(second_part_str)),
+                  tostring(am.parse(first_part_str))))
     steps.append('This will give %s%s  -> part (b)' %
                  (tostring(am.parse(second_part_diffstr)),
-                 tostring(am.parse(first_part_str))))
+                 tostring(am.parse('*'+first_part_str))))
     steps.append('Add part(a) and (b) together')
     answer = []
     answer.append(steps)
@@ -226,7 +229,7 @@ def qExpDifferentiation_template():
                                                                      % (front_num, 
                                                                         rand_power,
                                                                         end_num))))
-    steps.append('This will give %s which goes at front of original question' 
+    steps.append('This will give %s which is mulitiplied to original question' 
                  % tostring(am.parse(str(diff_top).replace("**","^"))))
     answer = []
     answer.append(steps)
@@ -315,8 +318,14 @@ def qSignificantFigures_template():
                  tostring(am.parse('%s/(%s*pi)'%(numerator,denom))) + tostring(am.parse('*'))
                  + str(am.parse('pi')))
     steps.append('This should give ' + tostring(am.parse(str(inside_root))))
-    steps.append('Then use 1/y key on calculator and press ' + str(root_val))
-    steps.append('Then get the value to %s significant figures.' % sig_fig)
+    steps.append('Then you need to square root the answer.')
+    steps.append('Use either [1/y] key or similar on calculator and press ' 
+                 + str(root_val))
+    steps.append('Please refer to your calculator manual if in doubt.')
+    steps.append('Then look for %s significant figures.' % sig_fig)
+    steps.append('Note: First non-zero digit is 1st signifiant figure,' + \
+                 ' going from left to right. Each digit after that is a' + \
+                 ' significant figure.')
     answer = []
     answer.append(steps)
     answer.append(round(val, sig_fig-int(floor(log10(val)))-1))
@@ -368,14 +377,20 @@ def qExponentialSameBase_template():
         front_num = randint(-100,100)
     lspow = front_num*x+randint(-100,100)
     question = tostring(am.parse('%s^(%s) = %s' % (base, lspow, rs)))
-
+    ls_samebase = tostring(am.parse('%s^(%s)' % (base, lspow)))
+    rs_samebase = tostring(am.parse('%s^(%s)' % (base, pow_rs)))
     steps = []
-    steps.append('Covert right side to be same base as left side - left side' \
-                  ' is base ' + str(base))
+    steps.append('Covert right side to be same base as left side. Left side' \
+                 ' has a base of: ' + str(base))
+    steps.append('As ' + tostring(am.parse('%s^(%s)=%s' % 
+                                                 (base, pow_rs, rs))))
     steps.append('Right side is now: ' + tostring(am.parse('%s^(%s)' % 
-                                                           (base, rs))))
-    steps.append('Therefore solve ' + tostring(am.parse('%s%s%s' %
-                                                        (lspow,'=',rs)))) 
+                                                           (base, pow_rs))))
+    steps.append('Therefore ' + ls_samebase + tostring(am.parse('=')) + \
+                 rs_samebase)
+    steps.append('Therefore solve: ' + tostring(am.parse('%s%s%s' %
+                                                        (lspow,'=',pow_rs)))) 
+    steps.append('Note: As bases are same the power equates to each other.')
     answer = []
     answer.append(steps)
 
