@@ -441,14 +441,6 @@ def main():
     questions.append(q)
     answers.append(a)
 
-    q, a = qExpDifferentiation_template()
-    questions.append(q)
-    answers.append(a)
-
-    q, a = qLogDifferentiation_template()
-    questions.append(q)
-    answers.append(a)
-
     q, a = qSimplifyBinomial_template()
     questions.append(q)
     answers.append(a)
@@ -457,11 +449,19 @@ def main():
     questions.append(q)
     answers.append(a)
 
+    q, a = qExpDifferentiation_template()
+    questions.append(q)
+    answers.append(a)
+
     q, a = qExponentialSameBase_template()
     questions.append(q)
     answers.append(a)
 
     q, a = qInequalities_template()
+    questions.append(q)
+    answers.append(a)
+
+    q, a = qLogDifferentiation_template()
     questions.append(q)
     answers.append(a)
 
