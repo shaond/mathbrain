@@ -7,13 +7,55 @@ from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
 from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan
-from sympy import radsimp, factor, together, Symbol
+from sympy import radsimp, factor, together, Symbol, integrate
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x
 from random import choice, randint
 from math import pow, log10, floor
 import re
+
+def qIntegrationNegativePower_template():
+    '''Integration involving a negative power e.g. 1/x^2.'''
+    '''Reason why this is asked is because students mistake this for ln()'''
+    pow_val = randint(2,9)
+    front_num = randint(-100,100)
+    #Note we remove the front number if -1 or 1 for time being to avoid logic
+    while front_num <= 1 and front_num >=-1: 
+        front_num = randint(-100,100)
+    question = "Find " + tostring(am.parse('int1/(%sx^%s)dx'% (str(front_num),
+                                                               str(pow_val))))
+
+    steps = []
+    num_log_diff = diff(front_num*x**pow_val)
+    true_log_integrate = tostring(am.parse('int(%s)/(%sx^%s)dx'%
+                                           (str(num_log_diff).
+                                            replace("**", "^"),
+                                            str(front_num),
+                                            str(pow_val)))) 
+    steps.append("This is not a logarithmic integration.")
+    steps.append("The reason is that the diff of the bottom x value should " + \
+                 "go on top which is the premise behind a logarithmic " + \
+                 "integration but the question does not show this. If you " + \
+                 "see " + true_log_integrate + " then it is.")
+    group_integrate = tostring(am.parse('int(%sx)^-%sdx'% (str(front_num),
+                                                           str(pow_val)))) 
+    steps.append("Integrate this normally as: " + group_integrate + \
+                 " which is the same as " + \
+                 tostring(am.parse('int1/(%sx^%s)dx' % (str(front_num),
+                                                        str(pow_val)))))
+    steps.append("Integrating this will be: [1 / (diff of " +
+                 tostring(am.parse("%sx*-%s" % (str(front_num),
+                                                str(pow_val)))) + 
+                 ")]" + tostring(am.parse("*(%sx)^(-%s+1)" % (str(front_num),
+                                                              str(pow_val)))))
+
+    answer = []
+    answer.append(steps)
+    ans = integrate(1/(front_num*x**pow_val))
+    answer.append(tostring(am.parse(str(ans).replace("**","^"))))
+
+    return question, answer
 
 def qSimpleBatchProbability_template():
     '''Simple Batch Probability problem.'''
@@ -469,6 +511,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    #q, a = qIntegrationNegativePower_template()
+    #questions.append(q)
+    #answers.append(a)
+
     #q, a = qSimpleBatchProbability_template()
     #questions.append(q)
     #answers.append(a)
