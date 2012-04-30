@@ -15,6 +15,41 @@ from random import choice, randint
 from math import pow, log10, floor
 import re
 
+def qSimpleBatchProbability_template():
+    '''Simple Batch Probability problem.'''
+    num_items = randint(100, 20000)
+    defective_prob = float(randint(1,100))/1000 #Want it to be 0.001 accuracy
+    question = "A batch of " + str(num_items) + " items is examained. " + \
+            "The probability of an item in this batch being defective is " + \
+            str(defective_prob)
+    question += ". How many items from this batch are defective?"
+
+    steps = []
+    prob_eqn = tostring(am.parse("Pr(E)=(n(E))/(n(S))"))
+    prob_word_eqn = tostring(am.parse("Probability(Event)=(" + \
+                                      "# of Events)/(" + \
+                                      "# of Sample Space)"))
+    steps.append("The probability of defectiveness is governed by the"+ \
+                 "following equation: " + prob_word_eqn + " known as: " + \
+                 prob_eqn)
+    steps.append("As we are given " + tostring(am.parse("Pr(E)=%s" %
+                                                        str(defective_prob))) +\
+                 " which is the defective probability ")
+    steps.append("Also we are given " + tostring(am.parse("n(s)=%s" %
+                                                        str(num_items))) + \
+                 " which is the number of items in the batch (sample space) ")
+    steps.append("Therefore we need to find " + tostring(am.parse("n(E)=Pr" + \
+                                                                  "(E)*n(s)")))
+    steps.append("This gives " + tostring(am.parse("n(E)=%s*%s" %
+                                                   (str(defective_prob),
+                                                    str(num_items))))) 
+    answer = []
+    answer.append(steps)
+    ans = float(num_items)*defective_prob
+    answer.append(tostring(am.parse(str(ans))))
+
+    return question, answer
+
 def qRationaliseDenominator_template():
     '''Ratoinalise Denominator e.g. Rataionlise 4/(root(4)-root(5))'''
     numerator = choice([2,3,5,6,7,8,10,11,20,32])
@@ -433,6 +468,12 @@ def main():
     questions = []
     answers = []
 
+    #Start - 2nd Iteration
+    #q, a = qSimpleBatchProbability_template()
+    #questions.append(q)
+    #answers.append(a)
+
+    #Start - 1st Iteration
     q, a = qRationaliseDenominator_template()
     questions.append(q)
     answers.append(a)
