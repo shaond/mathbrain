@@ -15,6 +15,77 @@ from random import choice, randint
 from math import pow, log10, floor
 import re
 
+def qDifferentiationSimpleTrig_template():
+    '''Differentiation involving trigonometry e.g. diff sin(x^2-2x).dx'''
+    x_pow = randint(-100,100) 
+    front_x = randint(-100,100) 
+    #TODO BUG: tan NOT giveing right values
+    #sohcahtoa_type = randint(0,2) #Sine,Cosine,Tan
+    sohcahtoa_type = randint(0,1) #Sine,Cosine
+    ans_val = None 
+    if sohcahtoa_type == 0:
+        ans_val = diff(sin(x**x_pow+front_x*x))
+    if sohcahtoa_type == 1:
+        ans_val  = diff(cos(x**x_pow+front_x*x))
+    if sohcahtoa_type == 2:
+        ans_val = diff(tan(x**x_pow+front_x*x))
+
+    if front_x > 0 and sohcahtoa_type == 0:
+        question = "Differentiate " + tostring(am.parse('sin((x^%s+%s*x))'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    elif front_x < 0 and sohcahtoa_type == 0:
+        question = "Differentiate " + tostring(am.parse('sin(x^%s%s*x)'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    elif front_x > 0 and sohcahtoa_type == 1:
+        question = "Differentiate " + tostring(am.parse('cos((x^%s+%s*x))'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    elif front_x < 0 and sohcahtoa_type == 1:
+        question = "Differentiate " + tostring(am.parse('cos((x^%s%s*x))'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    elif front_x > 0 and sohcahtoa_type == 2:
+        question = "Differentiate " + tostring(am.parse('tan((x^%s+%s*x))'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    elif front_x < 0 and sohcahtoa_type == 2:
+        question = "Differentiate " + tostring(am.parse('tan((x^%s%s*x))'%
+                                                        (str(x_pow),
+                                                         str(front_x))))
+    question += " with respect to x"
+
+
+    steps = []
+    steps.append("This is a trigonometry differentiation question.")
+    steps.append("Note a diff of sin(*) gives cos(*) whereas a diff of" + \
+                 " cos(*) gives -sin(*). Diff of tan gives sec.")
+    steps.append("Differentiate the inside and multiply it to the value of" + \
+                 " the outside")
+    #diff_inside = tostring(am.parse('int(%sx)^-%sdx'% (str(front_num),
+    #                                                       str(pow_val)))) 
+
+    answer = []
+    answer.append(steps)
+    print ans_val
+    trig_regex = re.compile("sin|cos\(")
+    match_obj = trig_regex.search(ans_val)
+    answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
+
+    return question, answer
+
+def qDifferentiationHardTrig_template():
+    '''Differentiation involving trigonometry e.g. diff x/sin(x^2).dx'''
+
+    print diff(x/sin(x**2))
+    print diff(x/sin(2*x**2))
+    print diff(3*x/sin(2*x**2))
+    print diff(3*x/sin(8*x**2+8*x-2))
+    print diff(3*x/cos(8*x**2+8*x-2))
+    question, answer = None, None
+    return question, answer
+
 def qIntegrationNegativePower_template():
     '''Integration involving a negative power e.g. 1/x^2.'''
     '''Reason why this is asked is because students mistake this for ln()'''
@@ -511,6 +582,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    #q, a = qDifferentiationSimpleTrig_template()
+    #questions.append(q)
+    #answers.append(a)
+
     #q, a = qIntegrationNegativePower_template()
     #questions.append(q)
     #answers.append(a)
