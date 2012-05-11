@@ -17,7 +17,7 @@ import re
 
 def qDifferentiationSimpleTrig_template():
     '''Differentiation involving trigonometry e.g. diff sin(x^2-2x).dx'''
-    x_pow = randint(-100,100) 
+    x_pow = randint(2,100) 
     front_x = randint(-100,100) 
     #TODO BUG: tan NOT giveing right values
     #sohcahtoa_type = randint(0,2) #Sine,Cosine,Tan
@@ -60,18 +60,23 @@ def qDifferentiationSimpleTrig_template():
     steps = []
     steps.append("This is a trigonometry differentiation question.")
     steps.append("Note a diff of sin(*) gives cos(*) whereas a diff of" + \
-                 " cos(*) gives -sin(*). Diff of tan gives sec.")
+                 " cos(*) gives -sin(*). Diff of tan gives sec squared.")
     steps.append("Differentiate the inside and multiply it to the value of" + \
                  " the outside")
-    #diff_inside = tostring(am.parse('int(%sx)^-%sdx'% (str(front_num),
-    #                                                       str(pow_val)))) 
 
     answer = []
     answer.append(steps)
-    print ans_val
-    trig_regex = re.compile("sin|cos\(")
-    match_obj = trig_regex.search(ans_val)
-    answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
+    trig_regex = re.compile("sin\(|cos\(")
+    match_obj = trig_regex.split(str(ans_val))
+    sin_cos_val = match_obj[0]
+    if 'cos' in str(ans_val):
+        sin_cos_val += "cos(("
+    if 'sin' in str(ans_val):
+        sin_cos_val += "sin(("
+    sin_cos_val += match_obj[1]
+    sin_cos_val += ")"
+    sin_cos_val = re.sub("-\(-","(",sin_cos_val)
+    answer.append(tostring(am.parse(str(sin_cos_val).replace("**","^"))))
 
     return question, answer
 
@@ -582,6 +587,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    #q, a = qDifferentiationHardTrig_template()
+    #questions.append(q)
+    #answers.append(a)
+
     #q, a = qDifferentiationSimpleTrig_template()
     #questions.append(q)
     #answers.append(a)
