@@ -123,9 +123,9 @@ def qQuadAlphBeta_template():
 def qEquationTangent_template():
     '''Equation of Tangent e.g. Find the equation of the tangent to the curve 
     y = (2x + 1)^4 at the point where x = –1.'''
-    front_x = randint(-5, 5)
-    while front_x == 0 or front_x == 1: 
-        front_x = randint(-5, 5)
+    front_x = randint(-6, 7)
+    while front_x == 0 or front_x == 1 or front_x == -1: 
+        front_x = randint(-6, 7)
     attach_val = randint(-100,100)
     while attach_val == 0: 
         attach_val = randint(-100,100)
