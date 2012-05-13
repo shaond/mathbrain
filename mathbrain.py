@@ -82,13 +82,83 @@ def qDifferentiationSimpleTrig_template():
 
 def qDifferentiationHardTrig_template():
     '''Differentiation involving trigonometry e.g. diff x/sin(x^2).dx'''
+    x_pow = randint(2,100) 
+    front_x_denom = randint(-100,100) 
+    while front_x_denom == 0:
+        front_x_denom = randint(-100,100) 
+    front_x_num = randint(-100,100) 
+    while front_x_num  == 0:
+        front_x_num  = randint(-100,100) 
 
-    print diff(x/sin(x**2))
-    print diff(x/sin(2*x**2))
-    print diff(3*x/sin(2*x**2))
-    print diff(3*x/sin(8*x**2+8*x-2))
-    print diff(3*x/cos(8*x**2+8*x-2))
-    question, answer = None, None
+    #TODO BUG: tan NOT giveing right values
+    #sohcahtoa_type = randint(0,2) #Sine,Cosine,Tan
+    sohcahtoa_type = randint(0,1) #Sine,Cosine
+    ans_val = None 
+    denominator = None 
+    question = None 
+    numerator = front_x_num*x 
+
+    if sohcahtoa_type == 0:
+        denominator = sin(x**x_pow+front_x_denom*x)
+    if sohcahtoa_type == 1:
+        denominator = cos(x**x_pow+front_x_denom*x)
+
+    ans_val = simplify(diff(numerator/denominator))
+
+    if sohcahtoa_type == 0 and front_x_denom > 0:
+        question = "Differentiate " + tostring(am.parse('(%s*x)/ \
+                                                        sin((x^%s+%s*x))'% 
+                                                        (str(front_x_num),
+                                                         str(x_pow),
+                                                         str(front_x_denom))))
+    elif sohcahtoa_type == 0 and front_x_denom < 0:
+        question = "Differentiate " + tostring(am.parse('(%s*x)/ \
+                                                        sin((x^%s%s*x))'% 
+                                                        (str(front_x_num),
+                                                         str(x_pow),
+                                                         str(front_x_denom))))
+    elif sohcahtoa_type == 1 and front_x_denom > 0:
+        question = "Differentiate " + tostring(am.parse('(%s*x)/ \
+                                                        cos((x^%s+%s*x))'% 
+                                                        (str(front_x_num),
+                                                         str(x_pow),
+                                                         str(front_x_denom))))
+    elif sohcahtoa_type == 1 and front_x_denom < 0:
+        question = "Differentiate " + tostring(am.parse('(%s*x)/ \
+                                                        cos((x^%s%s*x))'% 
+                                                        (str(front_x_num),
+                                                         str(x_pow),
+                                                         str(front_x_denom))))
+    question += " with respect to x"
+
+    steps = []
+    denominator_diff = diff(denominator)
+    numerator_diff = diff(numerator)
+    quotient_rule = tostring(am.parse("(v*u'-u*v')/(v^2)"))
+    trig_regex = re.compile("sin\(|cos\(")
+    match_obj = trig_regex.split(str(denominator_diff))
+    sin_cos_val = match_obj[0]
+    if 'cos' in str(denominator_diff):
+        sin_cos_val += "cos(("
+    if 'sin' in str(denominator_diff):
+        sin_cos_val += "sin(("
+    sin_cos_val += match_obj[1]
+    sin_cos_val += ")"
+    sin_cos_val = re.sub("-\(-","(",sin_cos_val)
+
+    steps.append("This is a differentiation of denominator and numerator")
+    steps.append("This is based on diff of " + tostring(am.parse('u/v')) + \
+                 " which is " + quotient_rule) 
+    steps.append("Please refer to http://en.wikipedia.org/wiki/Quotient_rule")
+    steps.append(tostring(am.parse("v'=%s" %
+                                   str(sin_cos_val).replace("**","^"))))
+    steps.append(tostring(am.parse("u'=%s" % str(numerator_diff)))) 
+    ans_val = str(ans_val).replace("**","^").replace("(","((").replace(")","))")
+    ans_val = ans_val.replace("/","/(").replace(")^2",")^2)")
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse(ans_val)))
     return question, answer
 
 def qIntegrationNegativePower_template():
@@ -161,9 +231,12 @@ def qSimpleBatchProbability_template():
     steps.append("This gives " + tostring(am.parse("n(E)=%s*%s" %
                                                    (str(defective_prob),
                                                     str(num_items))))) 
+    steps.append("This gives %s" % str(float(num_items)*defective_prob))
+    steps.append("Round to nearest whole number as you cannot have fraction")
+
     answer = []
     answer.append(steps)
-    ans = float(num_items)*defective_prob
+    ans = int(round(float(float(num_items)*defective_prob),0))
     answer.append(tostring(am.parse(str(ans))))
 
     return question, answer
@@ -587,21 +660,21 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
-    #q, a = qDifferentiationHardTrig_template()
-    #questions.append(q)
-    #answers.append(a)
+    q, a = qDifferentiationHardTrig_template()
+    questions.append(q)
+    answers.append(a)
 
-    #q, a = qDifferentiationSimpleTrig_template()
-    #questions.append(q)
-    #answers.append(a)
+    q, a = qDifferentiationSimpleTrig_template()
+    questions.append(q)
+    answers.append(a)
 
-    #q, a = qIntegrationNegativePower_template()
-    #questions.append(q)
-    #answers.append(a)
+    q, a = qIntegrationNegativePower_template()
+    questions.append(q)
+    answers.append(a)
 
-    #q, a = qSimpleBatchProbability_template()
-    #questions.append(q)
-    #answers.append(a)
+    q, a = qSimpleBatchProbability_template()
+    questions.append(q)
+    answers.append(a)
 
     #Start - 1st Iteration
     q, a = qRationaliseDenominator_template()
