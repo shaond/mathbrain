@@ -15,6 +15,79 @@ from random import choice, randint
 from math import pow, log10, floor
 import re
 
+def qDefiniteIntegralLog_template():
+    '''Definite Integral Log e.g. Integrate 5/x with e^3,e'''
+    numerator = randint(-100, 100)
+    while numerator == 0 or numerator == 1: 
+        numerator = randint(-100, 100)
+    denominator = randint(-100,100)
+    while denominator == 0  or denominator == 1: 
+        denominator = randint(-100,100)
+    max_val_pow = randint(-100,100)
+    while max_val_pow == 0 or max_val_pow == 1: 
+        max_val_pow = randint(-100,100)
+    min_val_pow = randint(-100,100)
+    while min_val_pow > max_val_pow: 
+        min_val_pow = randint(-100,100)
+
+    question = "Evaluate " 
+    if min_val_pow == 0: 
+        question += tostring(am.parse('int_(0)^(e^%s)%s/(%sx)dx' % 
+                                      (str(max_val_pow),
+                                       str(numerator),
+                                       str(denominator))))
+    elif min_val_pow == 1: 
+        question += tostring(am.parse('int_(e)^(e^%s)%s/(%sx)dx' % 
+                                      (str(max_val_pow),
+                                       str(numerator),
+                                       str(denominator))))
+    else: 
+        question += tostring(am.parse('int_(e^%s)^(e^%s)%s/(%sx)dx' % 
+                                      (str(min_val_pow),
+                                       str(max_val_pow),
+                                       str(numerator),
+                                       str(denominator))))
+
+    steps = []
+    num_log_diff = diff(denominator*x)
+    true_log_integrate = tostring(am.parse('int1/x'))
+    fudge_factor = tostring(am.parse("%s/%s" % (str(numerator),
+                                                str(denominator))))
+    steps.append("This is a logarithmic integration.")
+    steps.append("The reason is that the numerator's x-power is " + \
+                 "one less than the x power of the denominator. " + \
+                 "The integration looks similar to this " + \
+                 true_log_integrate)
+    steps.append("Note that the numerator is different to the one we expect" \
+                 " and we need to take out fudge factor which is " \
+                 + fudge_factor)
+    steps.append("This results in " + \
+                 tostring(am.parse('(1/%s)*%s*int_(e^%s)^(e^%s)1/xdx' % 
+                                   (str(denominator),
+                                    str(numerator),
+                                    str(min_val_pow),
+                                    str(max_val_pow)))))
+    steps.append("Which gives " + \
+                 tostring(am.parse('(%s/%s)*[ln((x))]_(e^%s)^(e^%s)' % 
+                                   (str(numerator),
+                                    str(denominator),
+                                    str(min_val_pow),
+                                    str(max_val_pow)))))
+    steps.append("Which equals " + \
+                 tostring(am.parse('(%s/%s)*[ln((e^%s)) - ln((e^%s))]' % 
+                                   (str(numerator),
+                                    str(denominator),
+                                    str(max_val_pow),
+                                    str(min_val_pow)))))
+
+    answer = []
+    answer.append(steps)
+    ans_val = integrate(numerator/(denominator*x), (x, exp(min_val_pow),
+                                                    exp(max_val_pow)))
+    answer.append(tostring(am.parse(str(ans_val).replace("**","^"))))
+
+    return question, answer
+
 def qDifferentiationSimpleTrig_template():
     '''Differentiation involving trigonometry e.g. diff sin(x^2-2x).dx'''
     x_pow = randint(2,100) 
@@ -660,6 +733,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    q, a = qDefiniteIntegralLog_template()
+    questions.append(q)
+    answers.append(a)
+
     q, a = qDifferentiationHardTrig_template()
     questions.append(q)
     answers.append(a)
