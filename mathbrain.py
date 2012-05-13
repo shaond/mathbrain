@@ -10,10 +10,59 @@ from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan
 from sympy import radsimp, factor, together, Symbol, integrate
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
-from sympy.abc import x
+from sympy.abc import x, y
 from random import choice, randint
 from math import pow, log10, floor
 import re
+
+def qEquationTangent_template():
+    '''Equation of Tangent e.g. Find the equation of the tangent to the curve 
+    y = (2x + 1)^4 at the point where x = –1.'''
+    front_x = randint(-100, 100)
+    while front_x == 0 or front_x == 1: 
+        numerator = randint(-100, 100)
+    attach_val = randint(-100,100)
+    while attach_val == 0: 
+        attach_val = randint(-100,100)
+    pow_val = randint(3,100)
+
+    x_val = randint(-100,100)
+
+    question = "Find the equation of the tangent to the curve " 
+    question_eqn = None
+    if attach_val > 0: 
+        question_eqn = tostring(am.parse("y=(%sx+%s)^%s" % (str(front_x), 
+                                                            str(attach_val), 
+                                                            str(pow_val))))
+    else: 
+        question_eqn = tostring(am.parse("y=(%sx%s)^%s" % (str(front_x), 
+                                                           str(attach_val), 
+                                                           str(pow_val)))) 
+    question += question_eqn 
+    question += " at the point where " 
+    question += tostring(am.parse("x=%s" % str(x_val)))
+
+    steps = []
+    straight_line_eqn = tostring(am.parse("y=mx+b"))
+    steps.append("Equation of a tangent is based on " + straight_line_eqn)
+    steps.append("%s, the gradient can be found by differentation of %s and \
+                 substituting %s" %
+                 (tostring(am.parse("m")), 
+                  question_eqn, tostring(am.parse("x=%s" % str(x_val)))))
+    diff_eqn = diff((front_x*x+attach_val)**pow_val)
+    steps.append(tostring(am.parse("m=%s" % str(diff_eqn).replace("**","^"))) 
+                 + " substituting " + tostring(am.parse("x=%s" % str(x_val))))
+    #steps.append("Therefore %s " + )
+    steps.append("The reason is that the numerator's x-power is " + \
+                 "one less than the x power of the denominator. " + \
+                 "The integration looks similar to this ")
+
+    answer = []
+    answer.append(steps)
+    #ans_val = diff(exp(10))
+    answer.append(tostring(am.parse(str("y=x-x").replace("**","^"))))
+
+    return question, answer
 
 def qDefiniteIntegralLog_template():
     '''Definite Integral Log e.g. Integrate 5/x with e^3,e'''
@@ -21,8 +70,11 @@ def qDefiniteIntegralLog_template():
     while numerator == 0 or numerator == 1: 
         numerator = randint(-100, 100)
     denominator = randint(-100,100)
-    while denominator == 0  or denominator == 1: 
-        denominator = randint(-100,100)
+    if numerator < 0:
+        denominator = randint(2,100)
+    else:
+        while denominator == 0  or denominator == 1: 
+            denominator = randint(-100,100)
     max_val_pow = randint(-100,100)
     while max_val_pow == 0 or max_val_pow == 1: 
         max_val_pow = randint(-100,100)
@@ -733,6 +785,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    q, a = qEquationTangent_template()
+    questions.append(q)
+    answers.append(a)
+
     q, a = qDefiniteIntegralLog_template()
     questions.append(q)
     answers.append(a)
