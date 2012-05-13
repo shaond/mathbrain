@@ -7,13 +7,118 @@ from xml.etree.ElementTree import tostring
 from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
 from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan
-from sympy import radsimp, factor, together, Symbol, integrate
+from sympy import radsimp, factor, together, Symbol, integrate, real_roots
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
 from sympy.abc import x, y
 from random import choice, randint
 from math import pow, log10, floor
 import re
+
+def qQuadAlphBeta_template():
+    '''Find Alpha & Beta in Quadratic Equation 
+    e.g. The quadratic equation x2 – 6x + 2 = 0 has roots α and β.'''
+    a_part = randint(-10, 10)
+    while a_part == 0 or a_part == 1: 
+        a_part = randint(-10, 10)
+    b_part = randint(-100,100)
+    while b_part == 0: 
+        b_part = randint(-100,100)
+
+    c_part = randint(-100,100)
+    #This is so that b^2-4ac is always positive
+    if a_part > 0:
+        c_part = randint(-100, -2)
+    else:
+        c_part = randint(2,100)
+
+    alpha_str = tostring(am.parse("alpha"))
+    beta_str = tostring(am.parse("beta"))
+    question = "The quadratic equation  " 
+    question_eqn = None
+    first_qn = tostring(am.parse("alpha+beta"))
+    second_qn = tostring(am.parse("alphabeta"))
+    third_qn = tostring(am.parse("1/(alpha)+1/(beta)"))
+    if b_part > 0 and c_part > 0: 
+        question_eqn = tostring(am.parse("%sx^2+%s+%s=0" % (str(a_part), 
+                                                            str(b_part), 
+                                                            str(c_part))))
+    elif b_part > 0 and c_part < 0: 
+        question_eqn = tostring(am.parse("%sx^2+%s%s=0" % (str(a_part), 
+                                                           str(b_part),
+                                                           str(c_part))))
+    elif b_part < 0 and c_part < 0: 
+        question_eqn = tostring(am.parse("%sx^2%s%s=0" % (str(a_part), 
+                                                          str(b_part), 
+                                                          str(c_part))))
+    else: 
+        question_eqn = tostring(am.parse("%sx^2%s+%s=0" % (str(a_part), 
+                                                           str(b_part), 
+                                                           str(c_part))))
+    question += question_eqn 
+    question += " has roots %s and %s."  % (alpha_str, beta_str) 
+    question += " (i) Find " + first_qn 
+    question += " (ii) Find " + second_qn
+    question += " (iii) Find " + third_qn
+
+    steps = []
+    ans_val = real_roots(a_part*x**2+b_part*x+c_part)
+    alpha_root, beta_root = ans_val[0], ans_val[1]
+    part_i_ans = simplify(alpha_root + beta_root)
+    part_ii_ans = simplify(alpha_root * beta_root)
+    part_iii_ans = "(%s)/(%s)" % (str(part_i_ans).replace("**","^"),
+                                  str(part_ii_ans).replace("**","^"))
+    quad_eqn_formula = tostring(am.parse("(-b+-sqrt(b^2-4ac))/(2a)"))
+    steps.append("First find the roots to alpha and beta")
+    steps.append("This is found by using the quadratic formula " +
+                 quad_eqn_formula)
+    steps.append("Note discrimant %s has to be +ve to have 2 real roots" % \
+                 tostring(am.parse("b^2-4ac")))
+    steps.append("%s is in the quadratic form %s" % \
+                 (question_eqn, tostring(am.parse("ax^2+bx+c=0"))))
+    steps.append("As %s is equal to %s, respectively" % \
+                 (tostring(am.parse("a,b,c")), 
+                           tostring(am.parse("%s,%s,%s" % (str(a_part), 
+                                                           str(b_part), 
+                                                           str(c_part))))))
+    steps.append("Substitute %s into %s" % (tostring(am.parse("%s,%s,%s" %
+                                                              (str(a_part),
+                                                               str(b_part),
+                                                               str(c_part)))), 
+                                            quad_eqn_formula))
+    steps.append("This gives" +
+                 tostring(am.parse("(-(%s)+-sqrt((%s)^2-4(%s)(%s)))/(2(%s))" %
+                                   (str(b_part), str(b_part), str(a_part),
+                                    str(c_part), str(a_part)))))
+    steps.append("**For our answers, we might have used power of 1/2. Please" +
+                 " replace with square root instead") 
+    steps.append("Which gives " + 
+                 tostring(am.parse("%s, %s" % 
+                                   (str(alpha_root).replace("**","^"), 
+                                    str(beta_root).replace("**", "^")))) + 
+                 " which are the 2 real roots known as alpha and beta")
+    steps.append("Part (i) is solved by " + \
+                 tostring(am.parse("%s+(%s)=%s" % \
+                                   (str(alpha_root).replace("**","^"), 
+                                    str(beta_root).replace("**", "^"),
+                                    str(part_i_ans).replace("**","^"))))) 
+    steps.append("Part (ii) is solved by " + \
+                 tostring(am.parse("%s*(%s)=%s" % \
+                                   (str(alpha_root).replace("**","^"), 
+                                    str(beta_root).replace("**", "^"),
+                                    str(part_ii_ans).replace("**","^"))))) 
+    steps.append("Part (iii) %s is equivalent to %s therefore using results " \
+                 "from part (i) & (ii): %s" %  
+                 (third_qn, tostring(am.parse("(alpha+beta)/(alpha*beta)")),
+                  tostring(am.parse(part_iii_ans))))
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse(str("%s,%s,%s" % (str(part_i_ans).replace("**","^"),
+                                                      str(part_ii_ans).replace("**","^"),
+                                                      part_iii_ans)))))
+
+    return question, answer
 
 def qEquationTangent_template():
     '''Equation of Tangent e.g. Find the equation of the tangent to the curve 
@@ -797,6 +902,10 @@ def main():
     answers = []
 
     #Start - 2nd Iteration
+    q, a = qQuadAlphBeta_template()
+    questions.append(q)
+    answers.append(a)
+
     q, a = qEquationTangent_template()
     questions.append(q)
     answers.append(a)
