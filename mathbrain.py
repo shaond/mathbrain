@@ -40,19 +40,19 @@ def qQuadAlphBeta_template():
     second_qn = tostring(am.parse("alphabeta"))
     third_qn = tostring(am.parse("1/(alpha)+1/(beta)"))
     if b_part > 0 and c_part > 0: 
-        question_eqn = tostring(am.parse("%sx^2+%s+%s=0" % (str(a_part), 
+        question_eqn = tostring(am.parse("%sx^2+%sx+%s=0" % (str(a_part), 
                                                             str(b_part), 
                                                             str(c_part))))
     elif b_part > 0 and c_part < 0: 
-        question_eqn = tostring(am.parse("%sx^2+%s%s=0" % (str(a_part), 
+        question_eqn = tostring(am.parse("%sx^2+%sx%s=0" % (str(a_part), 
                                                            str(b_part),
                                                            str(c_part))))
     elif b_part < 0 and c_part < 0: 
-        question_eqn = tostring(am.parse("%sx^2%s%s=0" % (str(a_part), 
+        question_eqn = tostring(am.parse("%sx^2%sx%s=0" % (str(a_part), 
                                                           str(b_part), 
                                                           str(c_part))))
     else: 
-        question_eqn = tostring(am.parse("%sx^2%s+%s=0" % (str(a_part), 
+        question_eqn = tostring(am.parse("%sx^2%sx+%s=0" % (str(a_part), 
                                                            str(b_part), 
                                                            str(c_part))))
     question += question_eqn 
