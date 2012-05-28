@@ -15,6 +15,38 @@ from random import choice, randint
 from math import pow, log10, floor
 import re
 
+def qSeconDiffInvolvingInverseTan_template():
+    '''If y = tan^-1(x^2), find d^2y/dx^2.'''
+
+    x_pow = randint(2,5)
+    question = "If " + tostring(am.parse("y=ta"))
+    question += tostring(am.parse("n^(-1)(x^%s)," % x_pow))
+    question += " find " + tostring(am.parse("(d^2y)/(dx^2)."))
+
+    steps = []
+    first_diff = (x_pow*x)/(1+x**x_pow)
+    second_diff = diff(first_diff)
+    second_diff_str = str(second_diff).replace("**", "^")
+    print first_diff
+    print second_diff
+    val_regex = re.compile("/")
+    val2_regex = re.compile("\+")
+    second_diff_str_mod = val_regex.split(second_diff_str)
+    second_diff_str_mod2 = val2_regex.split(second_diff_str_mod[1])
+    steps.append(tostring(am.parse(" (dy)/(dx)= %s" % 
+                                   str(first_diff).replace("**", "^"))))
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse(" (d^2y)/(dx^2)= (%s)/(%s+%s)+(%s)/(%s)" %
+                                    (second_diff_str_mod[0],
+                                     second_diff_str_mod2[0],
+                                     second_diff_str_mod2[1],
+                                     second_diff_str_mod2[2],
+                                     second_diff_str_mod[2]))))
+
+    return question, answer
+
 def qDivInterval_template():
     '''Division of Point e.g. The Point P divides the interval joining 
     A(-1, 2) to B(9,3) internally in the ratio 4:1. 
@@ -233,6 +265,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qSeconDiffInvolvingInverseTan_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qDivInterval_template()
     questions.append(q)
