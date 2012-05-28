@@ -10,10 +10,61 @@ from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan, expand
 from sympy import radsimp, factor, together, Symbol, integrate, real_roots
 from sympy.mpmath import nthroot, root
 from sympy.printing import mathml
-from sympy.abc import x, y, u
+from sympy.abc import x, y, u, t
 from random import choice, randint
 from math import pow, log10, floor
 import re
+
+def qSimpleTSubstitutionCos_template():
+    '''t substitution
+    e.g. If t = tan x/2, express as simply as possible in terms of t, (1-cosx)/(1+cosx)'''
+    
+    front_num = randint(-3,3)
+    while front_num == 0: 
+        front_num = randint(-3,3)
+
+    denom_positive = randint(0, 1)
+
+    question = "If " + tostring(am.parse("t=tan(x/2)")) 
+    question += " express as simply as possible in terms of " + \
+            tostring(am.parse("t,"))
+    question_eqn = None
+    question_eqn_str = None
+    eqn_sub_top = None
+    if denom_positive  == 1: 
+        eqn_sub_top = (front_num+cos(x))
+        eqn_sub_bott = (front_num-cos(x))
+        question_eqn = (eqn_sub_top)/(eqn_sub_bott)
+        question_eqn_str = tostring(am.parse("(%s+cos(x))/(%s-cos(x))" %
+                                             (front_num, front_num)))
+    else: 
+        eqn_sub_top = (front_num-cos(x))
+        eqn_sub_bott = (front_num+cos(x))
+        question_eqn = (eqn_sub_top)/(eqn_sub_bott)
+        question_eqn_str = tostring(am.parse("(%s-cos(x))/(%s+cos(x))" %
+                                             (front_num, front_num)))
+
+    question += " " + question_eqn_str
+
+    u = (1-t**2)/(1+t**2)
+    eqn_sub = question_eqn.subs(cos(x), u)
+    eqn_sub_str = str(eqn_sub).replace("**","^")
+    eqn_top = simplify(expand(eqn_sub_top.subs(cos(x),u)))
+    eqn_top_str = str(eqn_top).replace("**","^")
+    eqn_bott = simplify(expand(eqn_sub_bott.subs(cos(x),u)))
+    eqn_bott_str = str(eqn_bott).replace("**","^")
+    eqn_simplified = simplify(eqn_sub)
+    eqn_simplified_str = str(eqn_simplified).replace("**","^")
+
+    steps = []
+    steps.append(question_eqn_str + tostring(am.parse("=%s" % (eqn_sub_str))))
+    steps.append(tostring(am.parse("=(%s)/(%s)" % (eqn_top_str, eqn_bott_str))))
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse("%s" % eqn_simplified_str)))
+
+    return question, answer
 
 def qIntegrationBySub_template():
     '''Integration by substitution
@@ -128,7 +179,7 @@ def main():
     questions.append(q)
     answers.append(a)
 
-    q, a = qIntegrationBySub_template()
+    q, a = qSimpleTSubstitutionCos_template()
     questions.append(q)
     answers.append(a)
 
