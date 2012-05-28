@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block questionpaper %}
+    <h1>Math Brain</h1>
+    <p><a href="http://www.mathbrain.com.au">http://www.mathbrain.com.au</a></p>
+    <p>There are {{questions|length}} questions in this paper. <em>They are all
+styled after Maths Extension-1 NSW Year 12 HSC - Question 1.</em>. Estimated
+time to finish, 15 minutes.</p>
+    {% for question in questions %}
+    <div class="question">
+        <h3>Question {{ loop.index }}</h3>
+        <p>{{ question }}</p>
+    </div>
+    {% endfor %}
+{% endblock questionpaper %}

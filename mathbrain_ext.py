@@ -27,8 +27,6 @@ def qSeconDiffInvolvingInverseTan_template():
     first_diff = (x_pow*x)/(1+x**x_pow)
     second_diff = diff(first_diff)
     second_diff_str = str(second_diff).replace("**", "^")
-    print first_diff
-    print second_diff
     val_regex = re.compile("/")
     val2_regex = re.compile("\+")
     second_diff_str_mod = val_regex.split(second_diff_str)
@@ -238,12 +236,12 @@ def qIntegrationBySub_template():
 def render_question_paper(q, a):
     '''Generates the final question paper & answer sheet.'''
     env = Environment(loader=PackageLoader('mathbrain', 'templates'))
-    template_questions = env.get_template('template_questions.html')
-    template_answers = env.get_template('template_answers.html')
+    template_questions = env.get_template('template_questions_ext.html')
+    template_answers = env.get_template('template_answers_ext.html')
     
     try:
-        questions_html = open('questions.html', 'w')
-        answers_html = open('answers.html', 'w')
+        questions_html = open('questions_ext.html', 'w')
+        answers_html = open('answers_ext.html', 'w')
 
         # Generate our question paper.
         questions_html.write(template_questions.render(questions=q))
