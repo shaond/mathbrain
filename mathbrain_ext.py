@@ -15,6 +15,44 @@ from random import choice, randint
 from math import pow, log10, floor
 import re
 
+def qDivInterval_template():
+    '''Division of Point e.g. The Point P divides the interval joining 
+    A(-1, 2) to B(9,3) internally in the ratio 4:1. 
+    Find the coordinates of P.'''
+    #http://www.teacherschoice.com.au/Maths_Library/Analytical%20Geometry/AnalGeom_3.htm
+
+    xa = randint(-10,10)
+    xb = randint(-10,10)
+    ya = randint(-10,10)
+    yb = randint(-10,10)
+    k1 = randint(1,10)
+    k2 = randint(1,20)
+    while yb == ya:
+        yb = randint(-10,10)
+    while k1 == k2:
+        k2 = randint(1,20)
+    question = "The Point " + tostring(am.parse("P"))
+    question += " divides the interval joining " + tostring(am.parse("A(%s,%s)"
+                                                                    %(xa, ya)))
+    question += " to " +  tostring(am.parse("B(%s,%s)" %(xb, yb)))
+    question += " internally in the ratio " +  tostring(am.parse("%s:%s" 
+                                                                 %(k1, k2)))
+
+    steps = []
+    xp = simplify((k1*x+k2*u)/(k1 + k2)).subs(x,xb).subs(u,xa)
+    yp = simplify((k1*y+k2*t)/(k1 + k2)).subs(y,yb).subs(t,ya)
+    steps.append(tostring(am.parse("x_p = ((%s)*(%s) + (%s)*(%s))/(%s+%s)" 
+                                   % (k1, xb, k2, xa, k1, k2))))
+    steps.append(tostring(am.parse("y_p = ((%s)*(%s) + (%s)*(%s))/(%s+%s)" 
+                                   % (k1, yb, k2, ya, k1, k2))))
+    steps.append("Refer to http://www.teacherschoice.com.au/Maths_Library/Analytical%20Geometry/AnalGeom_3.htm")
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse("P(%s,%s)" %(xp, yp))))
+
+    return question, answer
+
 def qSimpleLimits_template():
     '''Limits e.g. lim h->0 sin(h/2)/h'''
     #ans_limit = limit(lambda x: (sin(x/5))/x, 0)
@@ -195,6 +233,10 @@ def main():
 
     questions = []
     answers = []
+
+    q, a = qDivInterval_template()
+    questions.append(q)
+    answers.append(a)
 
     q, a = qIntegrationBySub_template()
     questions.append(q)
