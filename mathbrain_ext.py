@@ -8,12 +8,33 @@ from jinja2 import Environment, PackageLoader
 from sympy import solve, Poly, Eq, Function, exp, Le, Lt, Ge, Gt
 from sympy import pi, cse, sqrt, simplify, diff, ln, sin, cos, tan, expand
 from sympy import radsimp, factor, together, Symbol, integrate, real_roots
-from sympy.mpmath import nthroot, root
+from sympy.mpmath import nthroot, root, limit
 from sympy.printing import mathml
 from sympy.abc import x, y, u, t
 from random import choice, randint
 from math import pow, log10, floor
 import re
+
+def qSimpleLimits_template():
+    '''Limits e.g. lim h->0 sin(h/2)/h'''
+    #ans_limit = limit(lambda x: (sin(x/5))/x, 0)
+
+    denominator = randint(2,10)
+    question = "Determine " 
+    question_str = tostring(am.parse("lim_(x->0)(sin(x/%s))/x" % denominator)) 
+    question += question_str
+
+    steps = []
+    working_out_eqn = tostring(am.parse("=lim_(x->0)1/%s*(sin(x/%s))/(x/%s)" %
+                                        (denominator, denominator,
+                                         denominator))) 
+    steps.append(question_str + working_out_eqn)
+
+    answer = []
+    answer.append(steps)
+    answer.append(tostring(am.parse("1/%s" % denominator)))
+
+    return question, answer
 
 def qSimpleTSubstitutionCos_template():
     '''t substitution
@@ -180,6 +201,10 @@ def main():
     answers.append(a)
 
     q, a = qSimpleTSubstitutionCos_template()
+    questions.append(q)
+    answers.append(a)
+
+    q, a = qSimpleLimits_template()
     questions.append(q)
     answers.append(a)
 
