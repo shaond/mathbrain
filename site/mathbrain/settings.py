@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     
     # project
     "about",
+    "timer",
 ]
 
 FIXTURE_DIRS = [
