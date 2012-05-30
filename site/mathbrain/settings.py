@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_openid.consumer.SessionConsumer",
+    #"django_openid.consumer.SessionConsumer",
     "django.contrib.messages.middleware.MessageMiddleware",
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
@@ -155,7 +155,7 @@ INSTALLED_APPS = [
     "compressor",
     "debug_toolbar",
     "mailer",
-    "django_openid",
+    #"django_openid",
     "timezones",
     "emailconfirmation",
     "metron",
@@ -177,8 +177,8 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 EMAIL_BACKEND = "mailer.backend.DbBackend"
 
-ACCOUNT_OPEN_SIGNUP = True
-ACCOUNT_USE_OPENID = False
+#ACCOUNT_OPEN_SIGNUP = True
+#ACCOUNT_USE_OPENID = False
 ACCOUNT_REQUIRED_EMAIL = False
 ACCOUNT_EMAIL_VERIFICATION = False
 ACCOUNT_EMAIL_AUTHENTICATION = False
