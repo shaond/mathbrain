@@ -3,38 +3,33 @@
 {% load i18n %}
 {% load ifsetting_tag %}
 
-{% block head_title %}{% trans "Welcome" %}{% endblock %}
+{% block head_title %}{% trans "Welcome to Math Brain" %}{% endblock %}
 
 {% block body_class %}home{% endblock %}
 
 {% block banner %}
-    <h1>{% trans "Welcome to Math Brain" %}</h1>
+    <h1 class="launch-page-heading">{% trans "Practice make perfect" %}</h1>
+    <div class="signup-about-panel">
+         <p>{% trans "The best way to get better at maths is to <i>practice</i> more. Sign up and test for yourself." %}</p>
+    </div>
+    <div class="signup-about-video">
+         <h2>{% trans "How does Math Brain work?" %}</h2>
+         <iframe src="http://player.vimeo.com/video/22411824" width="420px" height="237px" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+    </div>
     <div class="signup-panel">
-        <h1>{% trans "Sign Up" %}</h1>
+        <h1>{% trans "Sign up with an email address:" %}</h1>
             
             <form id="signup_form" method="post" action="{% url acct_signup %}" autocapitalize="off">
                 {% csrf_token %}
-                <input type="text" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                <input type="text" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                <div class="actions">
-                    <button type="submit" class="btn primary">{% trans "Sign Up" %}</button>
-                </div>
+                <input id="iemail" type="text" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"  placeholder="youremail@email.com"/>
+                <!--div class="actions"-->
+                    <button type="submit" class="btn primary large">{% trans "Sign me up!" %}</button>
+                <!--/div-->
             </form>
             
             {% url terms as terms_url %}
             {% url privacy as privacy_url %}
-            <p>{% blocktrans %}By clicking "Sign Up", you are indicating that you have read and agree to the <a href="{{ terms_url }}">Terms of Use</a> and <a href="{{ privacy_url }}">Privacy Policy</a>.{% endblocktrans %}</p>
-            
-            <p>{% blocktrans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
+            <p id="disclaimer">{% blocktrans %}By clicking "Sign me up", you are indicating that you have read and agree to the <a href="{{ terms_url }}">Terms of Use</a> and <a href="{{ privacy_url }}">Privacy Policy</a>.{% endblocktrans %}</p>
+            <p id="support">{% blocktrans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
     </div>
-        
-   <div class="left-panel">
-       <img src="{{ STATIC_URL }}img/clipped_owl.png" width="203" height="198" style="margin:5px 0 23px -15px;display:block" alt="Smart Owl">
-       <h2 class="left-panel">How does Math Brain work?</h2>
-       <p class="left-panel">
-           {% blocktrans %}
-           Once every two weeks, you'll get a set of questions that have been created by us or pulled from our vast collection of HSC questions. Once we've sent you the questions, a few days later, we'll email you the complete answers to those problems! Easy!
-           {% endblocktrans %}
-       </p>
-   </div>
 {% endblock %}

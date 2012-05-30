@@ -6,32 +6,8 @@
     <div class="container">
         {% include "_messages.html" %}
         <div class="hero-unit">
-        {% block banner %}
-            <h1>Hello, world!</h1>
-            <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
-            <p><a class="btn primary large">Learn more &raquo;</a></p>
-        {% endblock %}
-        </div>
-        
-        <div class="row">
-            <div class="span5">
-	    {% block column-1 %}
-                <h2 class="launchpage">NO SPAM! Ever.</h2>
-                <p class="launchpage">Everyone knows SPAM SUCKS! So we would never do that to you!</p>
+            {% block banner %}
             {% endblock %}
-            </div>
-            <div class="span5">
-            {% block column-2 %}
-                <h2 class="launchpage">Awesome features coming soon...</h2>
-                <p class="launchpage">We really want to help you ace the HSC. Coming soon will be questions tailored to your needs to help you achieve this goal. So watch this space!</p>
-            {% endblock %}
-            </div>
-            <div class="span5">
-            {% block column-3 %}
-                <h2 class="launchpage">Why Math Brain?</h2>
-                <p class="launchpage">We believe that maths shouldn't be complicated and believe that the best way to do well is by practicing heaps. We will be gathering or creating questions that are relevant to you. We are out to change how you learn... So, sign up - seriously... it can't get better than FREE!</p>
-            {% endblock %}
-            </div>
         </div>
     </div>
 {% endblock %}

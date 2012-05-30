@@ -31,10 +31,33 @@ p.launchpage {
 	margin-top: 10px;
 }
 
+.signup-about-video {
+	/*float: left;*/
+	font:normal 12px 'Bitter', serif;
+	width: 300px;
+	margin-left: 200px;
+	display: block;
+}
+
+.signup-about-panel {
+	/*float: left;*/
+	font:normal 12px 'Bitter', serif;
+	width: 380px;
+	margin-left: 200px;
+	margin-bottom: 30px;
+	display: block;
+}
+
+.signup-panel h1 {
+	/*float: left;*/
+	font:normal 32px 'Bitter', serif;
+	margin-top: 50px;
+}
+
 .signup-panel {
-	float: left;
+	/*float: left;*/
 	width: 600px;
-	margin: 0;
+	margin-left: 200px;
 	display: block;
 }
 
@@ -56,8 +79,24 @@ p.left-panel {
 }
 
 .hero-unit {
-	float: left;
+	/*float: left;*/
+	/*margin-left: 200px;*/
+        padding-top: 30px;
 }
+
+.hero-unit p {
+	/*float: left;*/
+	/*margin-left: 200px;*/
+	margin-top: 20px;
+}
+
+.launch-page-heading {
+	margin-left: 200px;
+}
+
+#iemail { width: 300px; height: 25px; padding: 12px 8px 12px 8px; margin-right: 10px; font-size: 20px; line-height: 25px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+#disclaimer { font-size: 13px; width: 340px;}
+#support { font-size: 13px;}
 
 
 /*************************
