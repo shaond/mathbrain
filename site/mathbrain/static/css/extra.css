@@ -51,7 +51,7 @@ p.launchpage {
 .signup-panel h1 {
 	/*float: left;*/
 	font:normal 32px 'Bitter', serif;
-	margin-top: 50px;
+	margin-top: 35px;
 }
 
 .signup-panel {
@@ -81,7 +81,7 @@ p.left-panel {
 .hero-unit {
 	/*float: left;*/
 	/*margin-left: 200px;*/
-        padding-top: 30px;
+        padding-top: 20px;
 }
 
 .hero-unit p {
