@@ -33,10 +33,16 @@ p.launchpage {
 
 .signup-about-video {
 	/*float: left;*/
-	font:normal 12px 'Bitter', serif;
-	width: 300px;
-	margin-left: 200px;
+	/*font:normal 12px 'Bitter', serif;*/
+	width: 550px;
+	margin-left: 230px;
 	display: block;
+}
+
+.signup-about-video h2 {
+	/*margin-left: 200px;*/
+	font-size: 36px;
+	margin-bottom: 5px;
 }
 
 .signup-about-panel {
@@ -57,7 +63,7 @@ p.launchpage {
 .signup-panel {
 	/*float: left;*/
 	width: 600px;
-	margin-left: 200px;
+	margin-left: 230px;
 	display: block;
 }
 
@@ -82,21 +88,27 @@ p.left-panel {
 	/*float: left;*/
 	/*margin-left: 200px;*/
         padding-top: 20px;
+        padding-right: 10px;
 }
 
 .hero-unit p {
 	/*float: left;*/
 	/*margin-left: 200px;*/
+	font-size: 16px;
 	margin-top: 20px;
+	margin-left: 30px;
+	width: 290px;
 }
 
 .launch-page-heading {
-	margin-left: 200px;
+	/*margin-left: 200px;*/
+	margin-top: 38px;
 }
 
+
 #iemail { width: 300px; height: 25px; padding: 12px 8px 12px 8px; margin-right: 10px; font-size: 20px; line-height: 25px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
-#disclaimer { font-size: 13px; width: 340px;}
-#support { font-size: 13px;}
+#disclaimer { font-size: 13px; width: 480px; margin-left:0px; }
+#support { font-size: 13px; width: 480px; margin-left:0px;margin-top:0px; }
 
 
 /*************************
@@ -126,6 +138,11 @@ p.left-panel {
 .icon.facebook
 {
 	background-image:url('../img/icon-facebook.png');
+}
+
+#launchpage-icon
+{
+	float: left;
 }
 
 /*
@@ -246,6 +263,10 @@ div.quickstart form textarea {
 }
 #footer p.right {
   float: right;
+}
+
+.legal {
+  margin-left: 120px;
 }
 
 /* Special grid styles
