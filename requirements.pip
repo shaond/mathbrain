@@ -7,7 +7,7 @@ django-debug-toolbar
 django-email-confirmation
 django-facebook
 django-mailer
-django-openid
+django-openid-auth
 django-staticfiles
 django-timezones
 macholib
