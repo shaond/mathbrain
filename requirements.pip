@@ -4,7 +4,10 @@ asciimathml
 django-appconf
 django-compressor
 django-debug-toolbar
+django-openid-consumer
 django-email-confirmation
+django-socialauth
+django_openid_provider
 django-facebook
 django-mailer
 django-openid-auth
