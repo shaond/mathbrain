@@ -24,3 +24,4 @@ python-openid
 pytz
 scipy
 -e git://github.com/sympy/sympy.git#egg=sympy
+-e git://github.com/simonw/django-openid.git#egg=django_openid
