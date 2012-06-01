@@ -37,6 +37,84 @@
   display: none;
 }
 
+h2.launchpage {
+  font:normal 22px/18px 'Bitter', serif;
+  color:#0395D3;
+}
+
+p.launchpage {
+  font:12px/18px 'Arial';
+  color:#494949;
+  display: block;
+  margin-top: 10px;
+}
+
+.signup-about-video {
+  width: 550px;
+  margin-left: 230px;
+  display: block;
+}
+
+.signup-about-video h2 {
+  font-size: 36px;
+  margin-bottom: 5px;
+}
+
+.signup-about-panel {
+  font:normal 12px 'Bitter', serif;
+  width: 380px;
+  margin-left: 200px;
+  margin-bottom: 30px;
+  display: block;
+}
+
+.signup-panel h1 {
+  font:normal 32px 'Bitter', serif;
+  margin-top: 35px;
+}
+
+.signup-panel {
+  width: 600px;
+  margin-left: 230px;
+  display: block;
+}
+
+.left-panel {
+  float: right;
+  width: 162px;
+  font-size: 11px;
+}
+h2.left-panel {
+  font:normal 22px/18px 'Bitter', serif;
+  color:#0395D3;
+}
+p.left-panel {
+  font:12px/18px 'Arial';
+  color:#494949;
+  display: block;
+  margin-top: 10px;
+}
+
+.hero-unit {
+  padding-top: 20px;
+  padding-right: 10px;
+}
+
+.hero-unit p {
+  font-size: 16px;
+  margin-top: 20px;
+  margin-left: 30px;
+}
+
+.launch-page-heading {
+  margin-top: 38px;
+}
+
+#iemail { width: 300px; height: 25px; padding: 12px 8px 12px 8px; margin-right: 10px; font-size: 20px; line-height: 25px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+#disclaimer { font-size: 13px; width: 480px; margin-left:0px; }
+#support { font-size: 13px; width: 480px; margin-left:0px;margin-top:0px; }
+#launchpage-icon{ float: left; }
+
 
 
 
