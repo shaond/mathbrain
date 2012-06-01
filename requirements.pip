@@ -1,31 +1,6 @@
-Django==1.3.1
-Pinax==0.9a2
-altgraph==0.9
-asciimathml==0.9.4.1
-django-appconf==0.5
-django-compressor==1.1.2
-django-debug-toolbar==0.9.4
-django-email-confirmation==0.2
-django-facebook==4.0.4
-django-forms-bootstrap==2.0.3.post1
-django-mailer==0.1.0
--e git://github.com/simonw/django-openid.git@5062aa93abc9a8d6f90837db690c26ace1c68672#egg=django_openid-dev
-django-openid-auth==0.4
-django-openid-consumer==0.1.1
-django-openid-provider==0.4
-django-socialauth==0.1.2c
-django-staticfiles==1.2.1
-django-timezones==0.2
-macholib==1.4.3
-metron==0.1
-modulegraph==0.9.1
-numpy==1.6.2
-pep8==1.1
-pinax-theme-bootstrap==2.0.3
-python-dateutil==2.1
-python-openid==2.2.5
-pytz==2012c
-scipy==0.10.1
-six==1.1.0
--e git://github.com/sympy/sympy.git@1f3fd71320f970e2275da196f8df2e417f620ed6#egg=sympy-dev
-wsgiref==0.1.2
+Django
+asciimathml
+numpy
+scipy
+-e git://github.com/sympy/sympy.git@1f3fd71320f970e2275da196f8df2e417f620ed6#egg=sympy
+wsgiref
