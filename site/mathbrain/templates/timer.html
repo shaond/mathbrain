@@ -53,7 +53,7 @@
         <div class="span-8">
             <!-- actual question image -->
             <p class="question border">
-                <img id="mbQuestion" class="center" src="/img/mathbrain.png" alt="Exam question" />
+                <img id="mbQuestionImg" class="center" src="/img/mathbrain.png" alt="Exam question" />
 
 
             </p>
@@ -125,10 +125,13 @@ $(document).ready(function() {
         $("#mbNavQuestions").removeClass("hidden");
 
         // Format: http://localhost:8000/examtimer/?number=1&mark=2&subject=2
-        var question = $.get(HTTPURL + "subject=" + subject + "&" + "number=1&" + "mark=2&",
-        function(){
-            alert("done!");
+        var question = $.getJSON(HTTPURL + "subject=" + subject + "&" + "number=1&" + "mark=2",
+        function(data) {
+            console.debug(data[0].pk);
+            var image = data[0].fields.question_img;
+            $("#mbQuestionImg").attr("src", "/" + image);
         });
+        // console.log(question);
     });
 
 
