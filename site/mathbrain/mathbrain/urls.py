@@ -33,5 +33,5 @@ if settings.DEBUG:
         (r'^img/(?P<path>.*)$', 'django.views.static.serve', {'document_root':
             os.path.abspath(os.path.join('static/img/'))}),
         (r'^questions/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': os.path.abspath(os.path.join(os.curdir, '..', 'questions'))})
+            {'document_root': os.path.abspath(os.path.join(os.curdir, 'questions'))})
     )
