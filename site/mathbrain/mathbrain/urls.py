@@ -10,7 +10,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'mathbrain.views.home', name='home'),
+    url(r'^$', direct_to_template, {'template': 'index.html', } ),
     # url(r'^mathbrain/', include('mathbrain.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
