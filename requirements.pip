@@ -4,7 +4,10 @@ asciimathml
 django-appconf
 django-compressor
 django-debug-toolbar
+django-openid-consumer
 django-email-confirmation
+django-socialauth
+django_openid_provider
 django-facebook
 django-mailer
 django-openid-auth
@@ -21,3 +24,4 @@ python-openid
 pytz
 scipy
 -e git://github.com/sympy/sympy.git#egg=sympy
+-e git://github.com/simonw/django-openid.git#egg=django_openid
