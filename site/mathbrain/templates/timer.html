@@ -86,11 +86,11 @@
         <!-- The right hand sidebar goes here -->
         <div class="span-4">
             <!-- The JS time goes here -->
-            <h1>3 marks<h1>
+            <h1 id="mbQuestionMarks"><h1>
             <h2>Total time left</h2>
-            <h1 class="blue">180:00</h1>
+            <h1 id="mbExamTimer" class="blue">180:00</h1>
             <h3>Time spent on this question</h3>
-            <h1 id="timer-question" class="red">01:00</h1>
+            <h1 id="mbQuestionTimer" class="red">01:00</h1>
         </div>
         <!-- End the right hand sidebar -->
 
@@ -130,6 +130,7 @@ $(document).ready(function() {
             console.debug(data[0].pk);
             var image = data[0].fields.question_img;
             $("#mbQuestionImg").attr("src", "/" + image);
+            $("#mbQuestionMarks").text(data[0].fields.mark + " marks");
         });
         // console.log(question);
     });
