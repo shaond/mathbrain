@@ -71,7 +71,7 @@ STATIC_ROOT_IMG = os.path.join(PROJECT_ROOT, "static", "img")
 
 # URL that handles the static files like app media.
 # Example: "http://media.lawrence.com"
-STATIC_URL = "/Users/herbertyeung/Documents/Projects/mathbrain/source/site/mathbrain/static/"
+STATIC_URL = os.path.join(PROJECT_ROOT, "static")
 
 # Additional directories which hold static files
 STATICFILES_DIRS = [
