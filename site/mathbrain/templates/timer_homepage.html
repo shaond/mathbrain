@@ -1,0 +1,149 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>2 Unit, Extension 1, Extension 2 Exam Timer - Math Brain (mathbrain.com.au)</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<style>
+	body {
+	  padding-top: 60px;
+	  padding-bottom: 40px;
+	}
+	</style>
+	<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	<script src="js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Math Brain</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="http://www.mathbrain.com.au">Home</a></li>
+              <li class="active"><a href="#timer">Exam Timer</a></li>
+              <li><a href="#pastexampapers">Past Exam Papers</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+
+        <!-- exam question -->
+        <div class="span-8">
+            <!-- actual question image -->
+            <p class="question border">
+                <img id="mbQuestion" class="center" src="img/mathbrain.png" alt="Exam question" />
+
+
+            </p>
+            <!-- / actual question image -->
+
+            <p><br /></p>
+
+            <!-- -->
+            <span id="mbSelectSubject">
+                <label for="subject">Select your subject</label>
+                <select id="subject">
+                  <option value="1">General Mathematics</option>
+                  <option value="2">2 Unit Mathematics</option>
+                  <option value="3">3 Unit Mathematics</option>
+                  <option value="4">4 Unit Mathematics</option>
+                </select>
+                <p id="mbBegin" class="pull-right"><a class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
+            </span>
+
+            <span id="mbNavQuestions" class="hidden">
+                <p id="mbNav" class="pull-right">
+                    <a class="btn btn-primary btn-large">&laquo; Previous</a>
+                    <a class="btn btn-primary btn-large">Next &raquo;</a>
+                </p>
+            </span>
+
+        </div>
+        <!-- /exam question -->
+
+        <!-- The right hand sidebar goes here -->
+        <div class="span-4">
+            <!-- The JS time goes here -->
+            <h1>3 marks<h1>
+            <h2>Total time left</h2>
+            <h1 class="blue">180:00</h1>
+            <h3>Time spent on this question</h3>
+            <h1 id="timer-question" class="red">01:00</h1>
+        </div>
+        <!-- End the right hand sidebar -->
+
+      </div>
+      <!-- / row -->
+
+      <hr>
+      <footer>
+        <p>&copy; Math Brain 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+
+<!-- event handling -->
+<script>
+var HTTPURL="http://localhost:8000/examtimer/?";
+
+$(document).ready(function() {
+    // Lets start working once the user is ready to begin
+    $("#mbBegin").click(function() {
+        // What subject are we doing?
+        var subject = $("#subject").val();
+        console.debug(subject);
+
+        // Change our UI elements
+        $("#mbSelectSubject").hide().fadeOut("slow");
+        $("#mbNavQuestions").removeClass("hidden");
+
+        // Format: http://localhost:8000/examtimer/?number=1&mark=2&subject=2
+        var question = $.get(HTTPURL + "subject=" + subject + "&" + "number=1&" + "mark=2&",
+        function(){
+            alert("done!");
+        });
+    });
+
+
+});
+</script>
+<!-- /event handling -->
+
+<!-- google -->
+<script>
+	var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+<!-- /google -->
+
+</body>
+</html>
