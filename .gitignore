@@ -30,3 +30,6 @@ pip-log.txt
 *.swp
 # Pycharm IDE files
 .idea
+
+.DS_Store
+
