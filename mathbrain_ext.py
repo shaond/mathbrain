@@ -195,8 +195,10 @@ def qIntegrationBySub_template():
     x_front = x-front_num
     eqn_expanded = ((x-front_num)*(x**pow_val)).expand(basic=True) 
     eqn_expanded_str = str(eqn_expanded).replace("**","^")
-    min_sub = eqn_expanded.subs(x, x_min)
-    max_sub = eqn_expanded.subs(x, x_max)
+    integ_eqn = integrate(eqn_expanded)
+    integ_eqn_str = str(integ_eqn).replace("**","^")
+    min_sub = integ_eqn.subs(x, x_min)
+    max_sub = integ_eqn.subs(x, x_max)
     min_sub_str = str(min_sub).replace("**","^")
     max_sub_str = str(max_sub).replace("**","^")
 
@@ -222,7 +224,7 @@ def qIntegrationBySub_template():
     steps.append(tostring(am.parse("= %sint_(%s)^(%s)(%s) dx" % 
                                    (diff_du, x_min, x_max, eqn_expanded_str)))) 
     steps.append(tostring(am.parse("= %s[%s]_(%s)^(%s)" % 
-                                   (diff_du, eqn_expanded_str, x_min, x_max)))) 
+                                   (diff_du, integ_eqn_str, x_min, x_max)))) 
     steps.append(tostring(am.parse("= %s[(%s)-(%s)]" % 
                                    (diff_du, max_sub_str, min_sub_str)))) 
 

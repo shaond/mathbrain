@@ -5,3 +5,4 @@ numpy
 scipy
 -e git://github.com/sympy/sympy.git@1f3fd71320f970e2275da196f8df2e417f620ed6#egg=sympy
 wsgiref
+jinja2
