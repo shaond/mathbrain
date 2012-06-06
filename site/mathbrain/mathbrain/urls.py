@@ -21,6 +21,7 @@ urlpatterns = patterns('',
 
     # Timer App
     url(r'^examtimer/$', 'timer.views.index'),
+    url(r'^buildexam/$', 'timer.views.buildexam'),
     url(r'^exam/$', direct_to_template, {'template': 'timer.html', } ),
 )
 
