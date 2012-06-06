@@ -4,6 +4,36 @@ from django.core import serializers
 from models import Question
 
 
+def questionset(subject=2):
+    qid = []
+    questions = []
+    marks = 0
+    num_questions = 0
+
+    if int(subject) == 2: #2U Maths
+        marks = 12
+        num_questions = 10
+    elif int(subject) == 3: #3U Maths
+        marks = 12
+        num_questions = 7
+    elif int(subject) == 4: #4U Maths
+        marks = 15
+        num_questions = 8
+
+    for qnum in range(num_questions):
+        qset = Question.objects.filter(subject=subject, num=qnum).order_by('?')
+        q1 = qset[0]
+        questions.append(q1)
+        qid.append(q1.id)
+        
+        marks = marks - q1.mark
+        while marks != 0:
+            nxt_q = qset.filter(mark__lte=marks).exclude(id__in=qid)[0]
+            questions.append(nxt_q)
+            qid.append(nxt_q.id)
+            marks = marks - nxt_q.mark
+    return questions
+
 def index(request):
     if request.method == 'GET':
         question_number = request.GET.get('number')
@@ -21,22 +51,6 @@ def buildexam(request):
         subject = request.GET.get('subject')
         if subject:
             if subject.isdigit():
-
-                qid = []
-                questions = []
-                marks = 12
-                qset = Question.objects.filter(subject=subject, num=1).order_by('?')
-                q1 = qset[0]
-                questions.append(q1)
-                qid.append(q1.id)
-                
-                marks = marks - q1.mark
-                while marks != 0:
-                    nxt_q = qset.filter(mark__lte=marks).exclude(id__in=qid)[0]
-                    questions.append(nxt_q)
-                    qid.append(nxt_q.id)
-                    marks = marks - nxt_q.mark
-
-                data = serializers.serialize('json', questions)
+                data = serializers.serialize('json', questionset(subject))
                 return HttpResponse(data, mimetype='application/json')
         return HttpResponse("Error", mimetype='application/json')
