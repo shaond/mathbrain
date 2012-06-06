@@ -62,7 +62,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>defaultLocation</key>
-					<string>~/Google Drive/Projects/Math Brain/Questions/2011</string>
+					<string>~/Desktop/pics</string>
 					<key>granularity</key>
 					<integer>0</integer>
 					<key>multipleSelection</key>
@@ -159,12 +159,10 @@
 						<string>3</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>452.500000:724.000000</string>
+				<string>309.500000:547.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Ask for Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -221,7 +219,7 @@
 					<key>replaceExisting</key>
 					<true/>
 					<key>toDirectory</key>
-					<string>~/Desktop/images</string>
+					<string>~/Documents/Projects/mathbrain/code/site/mathbrain/questions</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.CopyFiles</string>
@@ -281,12 +279,10 @@
 						<string>1</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>452.500000:569.000000</string>
+				<string>309.500000:392.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Copy Finder Items.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -384,12 +380,10 @@
 						<string>0</string>
 					</dict>
 				</dict>
-				<key>conversionLabel</key>
-				<integer>0</integer>
 				<key>isViewVisible</key>
 				<true/>
 				<key>location</key>
-				<string>452.500000:466.000000</string>
+				<string>309.500000:289.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Change Type of Images.action/Contents/Resources/English.lproj/main.nib</string>
 			</dict>
@@ -399,19 +393,19 @@
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>0E87FE1D-727A-4AE6-902B-35D83866929D</key>
-		<dict>
-			<key>from</key>
-			<string>B159707E-7E45-4FA7-9849-E5BC575EE764 - B159707E-7E45-4FA7-9849-E5BC575EE764</string>
-			<key>to</key>
-			<string>60C86855-4576-4338-9CD2-E045CEDB8B56 - 60C86855-4576-4338-9CD2-E045CEDB8B56</string>
-		</dict>
-		<key>B3899D38-8E10-47EF-AA97-1A26B32EB289</key>
+		<key>094743ED-8CCA-40FD-8939-48646B952287</key>
 		<dict>
 			<key>from</key>
 			<string>6F3E44DD-FBBB-4D1C-BAB0-32AB79381AAF - 6F3E44DD-FBBB-4D1C-BAB0-32AB79381AAF</string>
 			<key>to</key>
 			<string>B159707E-7E45-4FA7-9849-E5BC575EE764 - B159707E-7E45-4FA7-9849-E5BC575EE764</string>
+		</dict>
+		<key>705B4E6A-FCC2-4AA8-9D23-DE21F6F32CA7</key>
+		<dict>
+			<key>from</key>
+			<string>B159707E-7E45-4FA7-9849-E5BC575EE764 - B159707E-7E45-4FA7-9849-E5BC575EE764</string>
+			<key>to</key>
+			<string>60C86855-4576-4338-9CD2-E045CEDB8B56 - 60C86855-4576-4338-9CD2-E045CEDB8B56</string>
 		</dict>
 	</dict>
 	<key>workflowMetaData</key>
