@@ -111,11 +111,9 @@
 
 <!-- event handling -->
 <script>
-var HTTPURL="/examtimer/?";
-
 $(document).ready(function() {
-    // Lets start working once the user is ready to begin
     $("#mbBegin").click(function() {
+
         // What subject are we doing?
         var subject = $("#subject").val();
         console.debug(subject);
@@ -124,15 +122,16 @@ $(document).ready(function() {
         $("#mbSelectSubject").hide().fadeOut("slow");
         $("#mbNavQuestions").removeClass("hidden");
 
-        // Format: http://localhost:8000/examtimer/?number=1&mark=2&subject=2
-        var question = $.getJSON(HTTPURL + "subject=" + subject + "&" + "number=1&" + "mark=2",
+        var DATAURL = "/buildexam/?subject=" + subject;
+
+        var question = $.getJSON(DATAURL,
             function(data) {
                 console.debug(data[0].pk);
                 var image = data[0].fields.question_img;
                 $("#mbQuestionImg").attr("src", "/" + image);
                 $("#mbQuestionMarks").text(data[0].fields.mark + " marks");
         });
-        // console.log(question);
+
     });
 
 
