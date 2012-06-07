@@ -66,17 +66,17 @@
                 <label for="subject">Select your subject</label>
                 <select id="subject">
                   <option value="1">General Mathematics</option>
-                  <option value="2">2 Unit Mathematics</option>
+                  <option value="2" selected>2 Unit Mathematics</option>
                   <option value="3">3 Unit Mathematics</option>
                   <option value="4">4 Unit Mathematics</option>
                 </select>
-                <p id="mbBegin" class="pull-right"><a class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
+                <p class="pull-right"><a id="mbBegin" class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
             </span>
 
             <span id="mbNavQuestions" class="hidden">
                 <p id="mbNav" class="pull-right">
-                    <a class="btn btn-primary btn-large">&laquo; Previous</a>
-                    <a class="btn btn-primary btn-large">Next &raquo;</a>
+                    <a id="mbPrevious" class="btn btn-primary btn-large">&laquo; Previous</a>
+                    <a id="mbNext" class="btn btn-primary btn-large">Next &raquo;</a>
                 </p>
             </span>
 
@@ -112,11 +112,19 @@
 <!-- event handling -->
 <script>
 $(document).ready(function() {
+
+    // Returned question data will be stored
+    questions = {};
+
+    // The questions that's current displayed on screen
+    qIndex = 0;
+
+    // When someone clicks begin, we start
+    // ask for questions and return a JSON obj
     $("#mbBegin").click(function() {
 
         // What subject are we doing?
         var subject = $("#subject").val();
-        console.debug(subject);
 
         // Change our UI elements
         $("#mbSelectSubject").hide().fadeOut("slow");
@@ -124,17 +132,35 @@ $(document).ready(function() {
 
         var DATAURL = "/buildexam/?subject=" + subject;
 
-        var question = $.getJSON(DATAURL,
-            function(data) {
-                console.debug(data[0].pk);
-                var image = data[0].fields.question_img;
-                $("#mbQuestionImg").attr("src", "/" + image);
-                $("#mbQuestionMarks").text(data[0].fields.mark + " marks");
+        $.ajax({
+            url: DATAURL,
+            async: false,
+            dataType: 'json',
+            success: function(data) {
+                questions = data;
+            }
         });
 
     });
 
+    var processData = function(q) {
+        for (var i = 0; i <= data.length; i++) {
+            console.debug(data[i].pk);
+            var image = data[i].fields.question_img;
+        }
+    };
 
+    var displayQuestion = function(q) {
+        console.debug(q.pk);
+        $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
+        $("#mbQuestionMarks").text(q.fields.mark + " marks");
+    };
+
+    $("#mbNext").click(function() {
+        displayQuestion(questions[qIndex]);
+        qIndex = qIndex + 1;
+        console.debug(qIndex);
+    }); 
 });
 </script>
 <!-- /event handling -->
