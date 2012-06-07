@@ -52,33 +52,16 @@
         <!-- exam question -->
         <div class="span-8">
             <!-- actual question image -->
-            <p class="question border">
+            <p class="question border center">
                 <img id="mbQuestionImg" class="center" src="/img/mathbrain.png" alt="Exam question" />
-
+                
 
             </p>
             <!-- / actual question image -->
 
             <p><br /></p>
 
-            <!-- -->
-            <span id="mbSelectSubject">
-                <label for="subject">Select your subject</label>
-                <select id="subject">
-                  <option value="1">General Mathematics</option>
-                  <option value="2" selected>2 Unit Mathematics</option>
-                  <option value="3">3 Unit Mathematics</option>
-                  <option value="4">4 Unit Mathematics</option>
-                </select>
-                <p class="pull-right"><a id="mbBegin" class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
-            </span>
 
-            <span id="mbNavQuestions" class="hidden">
-                <p id="mbNav" class="pull-right">
-                    <a id="mbPrevious" class="btn btn-primary btn-large">&laquo; Previous</a>
-                    <a id="mbNext" class="btn btn-primary btn-large">Next &raquo;</a>
-                </p>
-            </span>
 
         </div>
         <!-- /exam question -->
@@ -91,7 +74,30 @@
             <h1 id="mbExamTimer" class="blue">180:00</h1>
             <h3>Time spent on this question</h3>
             <h1 id="mbQuestionTimer" class="red">01:00</h1>
+
+            <hr>
+
+            <!-- Subject -->
+            <span id="mbSelectSubject">
+                <label for="subject">Select your subject</label>
+                <select id="subject">
+                  <option value="1">General Mathematics</option>
+                  <option value="2" selected>2 Unit Mathematics</option>
+                  <option value="3">3 Unit Mathematics</option>
+                  <option value="4">4 Unit Mathematics</option>
+                </select>
+                <p class=""><a id="mbBegin" class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
+            </span>
+
+            <span id="mbNavQuestions" class="hidden">
+                <p id="mbNav" class="">
+                    <a id="mbPrevious" class="btn btn-primary btn-large">&laquo; Previous</a>
+                    <a id="mbNext" class="btn btn-primary btn-large">Next &raquo;</a>
+                </p>
+            </span>
         </div>
+
+
         <!-- End the right hand sidebar -->
 
       </div>
@@ -151,15 +157,16 @@ $(document).ready(function() {
     };
 
     var displayQuestion = function(q) {
-        console.debug(q.pk);
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
     };
 
     $("#mbNext").click(function() {
         displayQuestion(questions[qIndex]);
-        qIndex = qIndex + 1;
-        console.debug(qIndex);
+        if (qIndex < questions.length) {
+            qIndex = qIndex + 1;
+            console.debug(qIndex);
+        }
     }); 
 });
 </script>
