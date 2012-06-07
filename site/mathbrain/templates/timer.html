@@ -149,21 +149,14 @@ $(document).ready(function() {
 
     });
 
-    var processData = function(q) {
-        for (var i = 0; i <= data.length; i++) {
-            console.debug(data[i].pk);
-            var image = data[i].fields.question_img;
-        }
-    };
-
     var displayQuestion = function(q) {
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
     };
 
     $("#mbNext").click(function() {
-        displayQuestion(questions[qIndex]);
         if (qIndex < questions.length) {
+            displayQuestion(questions[qIndex]);
             qIndex = qIndex + 1;
             console.debug(qIndex);
         }
