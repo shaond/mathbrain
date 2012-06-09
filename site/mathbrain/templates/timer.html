@@ -125,6 +125,11 @@ $(document).ready(function() {
     // The questions that's current displayed on screen
     qIndex = 0;
 
+    var displayQuestion = function(q) {
+        $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
+        $("#mbQuestionMarks").text(q.fields.mark + " marks");
+    };
+
     // When someone clicks begin, we start
     // ask for questions and return a JSON obj
     $("#mbBegin").click(function() {
@@ -146,21 +151,25 @@ $(document).ready(function() {
                 questions = data;
             }
         });
+    
+        // display the first question
+        displayQuestion(questions[qIndex]);
 
     });
 
-    var displayQuestion = function(q) {
-        $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
-        $("#mbQuestionMarks").text(q.fields.mark + " marks");
-    };
-
     $("#mbNext").click(function() {
         if (qIndex < questions.length) {
-            displayQuestion(questions[qIndex]);
             qIndex = qIndex + 1;
-            console.debug(qIndex);
+            displayQuestion(questions[qIndex]);
         }
     }); 
+
+    $("#mbPrevious").click(function() { 
+        if (qIndex > 0) {
+            qIndex = qIndex - 1;
+            displayQuestion(questions[qIndex]);
+        }
+    });
 });
 </script>
 <!-- /event handling -->
