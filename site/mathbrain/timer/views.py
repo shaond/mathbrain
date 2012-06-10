@@ -13,11 +13,11 @@ def png_to_model(request):
         vals = filename.split("_") 
         topic_vals = vals[6].split(".png")[0]
         if vals[0] == "2u":
-            topic_vals = TwoUnit.topics[int(topic_vals)-1]
+            topic_vals = TwoUnit.topics[int(topic_vals)]
         elif vals[0] == "3u":
-            topic_vals = ThreeUnit.topics[int(topic_vals)-1]
+            topic_vals = ThreeUnit.topics[int(topic_vals)]
         elif vals[0] == "4u":
-            topic_vals = FourUnit.topics[int(topic_vals)-1]
+            topic_vals = FourUnit.topics[int(topic_vals)]
         new_qn = Question(question_img="questions/"+filename, 
                          num=int(vals[2][1:]), 
                          mark=int(vals[4][0]), 
