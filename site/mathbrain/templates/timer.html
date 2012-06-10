@@ -71,7 +71,7 @@
             <!-- The JS time goes here -->
             <h1 id="mbQuestionMarks"><h1>
             <h2>Total time left</h2>
-            <h1 id="mbExamTimer" class="blue">180:00</h1>
+            <h1 id="mbExamTimer" class="blue"></h1>
             <h3>Time spent on this question</h3>
             <h1 id="mbQuestionTimer" class="red">01:00</h1>
 
@@ -131,6 +131,26 @@ $(document).ready(function() {
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
     };
 
+    function countdown(element, minutes, seconds) {
+        // http://jsfiddle.net/Apnu2/6/
+        var time = minutes*60 + seconds;
+        var interval = setInterval(function() {
+            var el = document.getElementById(element);
+            if(time == 0) {
+                el.innerHTML = "countdown's over!";    
+                clearInterval(interval);
+                return;
+            }
+            var minutes = Math.floor(time / 60);
+            if (minutes < 10) minutes = "0" + minutes;
+            var seconds = time % 60;
+            if (seconds < 10) seconds = "0" + seconds; 
+            var text = minutes + ':' + seconds;
+            el.innerHTML = text;
+            time--;
+        }, 1000);
+    }
+
     // When someone clicks begin, we start
     // ask for questions and return a JSON obj
     $("#mbBegin").click(function() {
@@ -156,6 +176,17 @@ $(document).ready(function() {
         // display the first question
         displayQuestion(questions[qIndex]);
 
+        // set the count down timer for the exam
+        if (parseInt(subject) === 2) { 
+            countdown('mbExamTimer', 180, 0);
+        }
+        if (parseInt(subject) === 3) {
+            countdown('mbExamTimer', 120, 0);
+        }
+        if (parseInt(subject) === 4) {
+            countdown('mbExamTimer', 120, 0);
+        }
+
     });
 
     $("#mbNext").click(function() {
@@ -176,7 +207,7 @@ $(document).ready(function() {
             qIndex = qIndex - 1;
             displayQuestion(questions[qIndex]);
         }
-        if (qIndex != (questions.length - 1)) {
+        if (qIndex !== (questions.length - 1)) {
             $("#mbNext").show();
         }
         if (qIndex === 0) {
