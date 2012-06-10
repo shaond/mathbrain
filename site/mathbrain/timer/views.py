@@ -11,11 +11,12 @@ def png_to_model(request):
     for filename in os.listdir(path_img):
         vals = filename.split("_") 
         newQn = Question(question_img="questions/"+filename, 
-                         num=int(vals[1][1:]), topic="", 
-                         mark=int(vals[3][0]), 
-                         subject=2, 
-                         source="HSC", 
-                         pub_date='2011-01-01')
+                         num=int(vals[2][1:]), 
+                         mark=int(vals[4][0]), 
+                         subject=int(vals[0][0]), 
+                         source=vals[5], 
+                         topic=vals[6], 
+                         pub_date=vals[1]+'-01-01')
         newQn.save()
 
     return HttpResponse("Done", mimetype='application/json')
