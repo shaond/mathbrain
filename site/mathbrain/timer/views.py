@@ -4,20 +4,28 @@ from django.core import serializers
 from models import Question
 
 import os 
+from topics import TwoUnit, ThreeUnit, FourUnit
 
 def png_to_model(request):
     '''Populate a model based on filename'''
     path_img = os.path.join(os.pardir, 'mathbrain/questions')
     for filename in os.listdir(path_img):
         vals = filename.split("_") 
-        newQn = Question(question_img="questions/"+filename, 
+        topic_vals = vals[6].split(".png")[0]
+        if vals[0] == "2u":
+            topic_vals = TwoUnit.topics[int(topic_vals)-1]
+        elif vals[0] == "3u":
+            topic_vals = ThreeUnit.topics[int(topic_vals)-1]
+        elif vals[0] == "4u":
+            topic_vals = FourUnit.topics[int(topic_vals)-1]
+        new_qn = Question(question_img="questions/"+filename, 
                          num=int(vals[2][1:]), 
                          mark=int(vals[4][0]), 
                          subject=int(vals[0][0]), 
                          source=vals[5], 
-                         topic=vals[6], 
+                         topic=topic_vals, 
                          pub_date=vals[1]+'-01-01')
-        newQn.save()
+        new_qn.save()
 
     return HttpResponse("Done", mimetype='application/json')
 
