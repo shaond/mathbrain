@@ -53,10 +53,13 @@ def questionset(subject=2):
         
         marks = marks_start - q1.mark
         while marks != 0:
-            nxt_q = qset.filter(mark__lte=marks).exclude(id__in=qid)[0]
-            questions.append(nxt_q)
-            qid.append(nxt_q.id)
-            marks = marks - nxt_q.mark
+            try:
+                nxt_q = qset.filter(mark__lte=marks).exclude(id__in=qid)[0]
+                questions.append(nxt_q)
+                qid.append(nxt_q.id)
+                marks = marks - nxt_q.mark
+            except IndexError: #This can happen if we don't get 'exactly' total
+                marks -= marks
     return questions
 
 def index(request):
