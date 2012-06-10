@@ -91,13 +91,13 @@
 
             <span id="mbNavQuestions" class="hidden">
                 <p id="mbNav" class="">
-                    <a id="mbPrevious" class="btn btn-primary btn-large">&laquo; Previous</a>
+                    <a id="mbPrevious" class="btn btn-primary btn-large hidden">&laquo; Previous</a>
                     <a id="mbNext" class="btn btn-primary btn-large">Next &raquo;</a>
-                    <a id="mbFinish" class="btn btn-primary btn-large hidden">Finished</a>
+                    <!-- <a id="mbFinish" class="btn btn-primary btn-large
+                        hidden">Finished</a> -->
                 </p>
             </span>
         </div>
-
 
         <!-- End the right hand sidebar -->
 
@@ -166,6 +166,9 @@ $(document).ready(function() {
         if (qIndex === (questions.length - 1)) {
             $("#mbNext").hide();
         }
+        if (qIndex > 0) {
+            $("#mbPrevious").removeClass("hidden");
+        }
     }); 
 
     $("#mbPrevious").click(function() { 
@@ -175,6 +178,9 @@ $(document).ready(function() {
         }
         if (qIndex != (questions.length - 1)) {
             $("#mbNext").show();
+        }
+        if (qIndex === 0) {
+            $("#mbPrevious").addClass("hidden");
         }
     });
 
