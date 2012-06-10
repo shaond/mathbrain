@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 
 class TwoUnit:
-    topics = ["Basic arithmetic and algebra",  #Prelim
-              "Real functions",
-              "Trigonometric ratios", 
-              "Linear functions", 
-              "The quadratic polynomial and the parabola", 
-              "Plane geometry", 
-              "Tangent to a curve and derivative of a function",
-              "Coordinate methods in geometry", #HSC 
-              "Applications of geometrical properties",
-              "Geometrical applications of differentiation",
-              "Integration",
-              "Trigonometric functions",
-              "Logarithmic and exponential functions",
-              "Applications of calculus to the physical world",
-              "Probability",
+    topics = ["Basic arithmetic and algebra",  #Prelim #0
+              "Real functions", #1
+              "Trigonometric ratios", #2 
+              "Linear functions",#3 
+              "The quadratic polynomial and the parabola",#4 
+              "Plane geometry",#5
+              "Tangent to a curve and derivative of a function",#6
+              "Coordinate methods in geometry", #HSC #7 
+              "Applications of geometrical properties", #8
+              "Geometrical applications of differentiation", #9
+              "Integration", #10
+              "Trigonometric functions",#11
+              "Logarithmic and exponential functions", #12
+              "Applications of calculus to the physical world", #13
+              "Probability", #14
               "Series and Sequences"]
 
 class ThreeUnit:
