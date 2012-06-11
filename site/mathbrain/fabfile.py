@@ -49,6 +49,6 @@ def deploy():
         run('python manage.py collectstatic --noinput')
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
-                ' outlog=/var/log/whichone/access.log' \
-                ' errlog=/var/log/whichone/error.log')
+                ' outlog=/var/log/mathbrain/access.log' \
+                ' errlog=/var/log/mathbrain/error.log')
 
