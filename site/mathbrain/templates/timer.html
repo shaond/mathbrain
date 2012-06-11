@@ -156,30 +156,6 @@ $(document).ready(function() {
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
         $("#mbQuestionTimer").countdown('destroy');
         $("#mbQuestionTimer").countdown({since: 'now', compact: true, format: 'MS'});
-        /* if (parseInt(q.fields.mark) > 0) {
-            switch (parseInt(subject)) {
-                case 2:
-                    $("#mbQuestionTimer").countdown('destroy');
-                    var qTime = new Date();
-                    expectedTime = (180/120 * parseInt(q.fields.mark));
-                    console.debug("Expected time: " + expectedTime);
-                    time = qTime.setMinutes(qTime.getMinutes() + expectedTime);
-                    console.debug(time);
-                    $("#mbQuestionTimer").countdown({since: 'now', compact:
-                        true, format: 'MS'});
-                    break;
-                case 3:
-                    delete qTimer;
-                    qTimer = examtime('mbQuestionTimer', (120/84 * parseInt(q.fields.mark)), 0);
-                    break;
-                case 4:
-                    delete qTimer;
-                    qTimer = examtime('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
-                    break;
-                default:
-                    break;
-            }
-        } */
     };
 
     // When someone clicks begin, we start
@@ -211,9 +187,9 @@ $(document).ready(function() {
         displayQuestion(questions[qIndex]);
 
         // set the count down timer for the exam
-        if (parseInt(subject) === 2) examtime('mbExamTimer', 180, 0);
-        if (parseInt(subject) === 3) examtime('mbExamTimer', 120, 0);
-        if (parseInt(subject) === 4) examtime('mbExamTimer', 120, 0);
+        if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+        if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
+        if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
 
     });
 
