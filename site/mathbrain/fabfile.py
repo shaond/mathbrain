@@ -42,10 +42,11 @@ def deploy():
         run('git pull')
 
     with cd(env.coderoot):
-        # run('python manage.py dumpdata --indent=2 > /tmp/mathbrain-dbdump.json')
         with settings(warn_only=True):
             run('kill -9 `cat /tmp/django.pid`')
             run('rm /tmp/django.pid')
+        run('python manage.py dumpdata --indent=2 > /tmp/mathbrain-dbdump.json')
+        run('python manage.py syncdb')
         run('python manage.py collectstatic --noinput')
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
