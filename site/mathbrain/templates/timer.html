@@ -113,7 +113,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 <script src="/js/libs/bootstrap/bootstrap.min.js"></script>
-<script src="/js/script.js"></script>
+<script src="/js/libs/jquery.countdown.pack.js"></script>
 
 <!-- event handling -->
 <script>
@@ -131,7 +131,7 @@ $(document).ready(function() {
     // The current question timer
     var qTimer;
 
-    var countdown = function(element, minutes, seconds) {
+    var examtime = function(element, minutes, seconds) {
         /* based on http://jsfiddle.net/Apnu2/6/ */
         var time = (minutes * 60 + seconds);
         var interval = setInterval(function() {
@@ -154,25 +154,32 @@ $(document).ready(function() {
     var displayQuestion = function(q) {
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
-        if (parseInt(q.fields.mark) > 0) {
+        $("#mbQuestionTimer").countdown('destroy');
+        $("#mbQuestionTimer").countdown({since: 'now', compact: true, format: 'MS'});
+        /* if (parseInt(q.fields.mark) > 0) {
             switch (parseInt(subject)) {
                 case 2:
-                    // 2 Unit question
-                    delete qTimer;
-                    qTimer = countdown('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
+                    $("#mbQuestionTimer").countdown('destroy');
+                    var qTime = new Date();
+                    expectedTime = (180/120 * parseInt(q.fields.mark));
+                    console.debug("Expected time: " + expectedTime);
+                    time = qTime.setMinutes(qTime.getMinutes() + expectedTime);
+                    console.debug(time);
+                    $("#mbQuestionTimer").countdown({since: 'now', compact:
+                        true, format: 'MS'});
                     break;
                 case 3:
-                    // 3 Unit question
                     delete qTimer;
-                    qTimer = countdown('mbQuestionTimer', (120/84 * parseInt(q.fields.mark)), 0);
+                    qTimer = examtime('mbQuestionTimer', (120/84 * parseInt(q.fields.mark)), 0);
                     break;
                 case 4:
-                    // 4 Unit question
                     delete qTimer;
-                    qTimer = countdown('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
+                    qTimer = examtime('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
+                    break;
+                default:
                     break;
             }
-        }
+        } */
     };
 
     // When someone clicks begin, we start
@@ -204,9 +211,9 @@ $(document).ready(function() {
         displayQuestion(questions[qIndex]);
 
         // set the count down timer for the exam
-        if (parseInt(subject) === 2) countdown('mbExamTimer', 180, 0);
-        if (parseInt(subject) === 3) countdown('mbExamTimer', 120, 0);
-        if (parseInt(subject) === 4) countdown('mbExamTimer', 120, 0);
+        if (parseInt(subject) === 2) examtime('mbExamTimer', 180, 0);
+        if (parseInt(subject) === 3) examtime('mbExamTimer', 120, 0);
+        if (parseInt(subject) === 4) examtime('mbExamTimer', 120, 0);
 
     });
 
