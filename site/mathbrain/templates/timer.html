@@ -128,29 +128,6 @@ $(document).ready(function() {
     // The subject we are doing
     var subject = 0;
 
-    // The current question timer
-    var qTimer;
-
-    var examtime = function(element, minutes, seconds) {
-        /* based on http://jsfiddle.net/Apnu2/6/ */
-        var time = (minutes * 60 + seconds);
-        var interval = setInterval(function() {
-            var el = document.getElementById(element);
-            if (time == 0) {
-                el.innerHTML = "0";    
-                clearInterval(interval);
-                return;
-            }
-            var minutes = Math.floor(time / 60);
-            if (minutes < 10) minutes = "0" + minutes;
-            var seconds = time % 60;
-            if (seconds < 10) seconds = "0" + seconds; 
-            var text = minutes + ':' + seconds;
-            el.innerHTML = text;
-            time--;
-        }, 1000);
-    }    
-        
     var displayQuestion = function(q) {
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
