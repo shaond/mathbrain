@@ -20,7 +20,7 @@ def png_to_model(request):
             topic_vals = FourUnit.topics[int(topic_vals)]
         new_qn = Question(question_img="questions/"+filename, 
                          num=int(vals[2][1:]), 
-                         mark=int(vals[4][0]), 
+                         mark=int(vals[4].split("m")[0]), 
                          subject=int(vals[0][0]), 
                          source=vals[5], 
                          topic=topic_vals, 
