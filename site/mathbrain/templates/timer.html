@@ -70,29 +70,28 @@
         <div class="span-4">
             <!-- The JS time goes here -->
             <h1 id="mbQuestionMarks"><h1>
-            <h2>Total time left</h2>
+            <h2 id="mbExamTimerHeader" class="hidden">Total time left</h2>
             <h1 id="mbExamTimer" class="blue"></h1>
-            <h3>Time spent on this question</h3>
-            <h1 id="mbQuestionTimer" class="red">01:00</h1>
+            <h3 id="mbQuestionTimerHeader" class="hidden">Time spent on this question</h3>
+            <h1 id="mbQuestionTimer" class="red"></h1>
 
-            <hr>
+            <hr id="mbButtonHR" class="hidden">
 
             <!-- Subject -->
             <span id="mbSelectSubject">
                 <label for="subject">Select your subject</label>
                 <select id="subject">
-                  <option value="1">General Mathematics</option>
                   <option value="2" selected>2 Unit Mathematics</option>
                   <option value="3">3 Unit Mathematics</option>
                   <option value="4">4 Unit Mathematics</option>
                 </select>
-                <p class=""><a id="mbBegin" class="btn btn-primary btn-large btn-danger">Begin &raquo;</a></p>
+                <p class=""><button id="mbBegin" class="btn btn-primary btn-large btn-danger">Begin &raquo;</button></p>
             </span>
 
             <span id="mbNavQuestions" class="hidden">
                 <p id="mbNav" class="">
-                    <a id="mbPrevious" class="btn btn-primary btn-large hidden">&laquo; Previous</a>
-                    <a id="mbNext" class="btn btn-primary btn-large">Next &raquo;</a>
+                    <button id="mbPrevious" class="btn btn-primary btn-large hidden">&laquo; Previous</button>
+                    <button id="mbNext" class="btn btn-primary btn-large">Next &raquo;</button>
                     <!-- <a id="mbFinish" class="btn btn-primary btn-large
                         hidden">Finished</a> -->
                 </p>
@@ -121,23 +120,24 @@
 $(document).ready(function() {
 
     // Returned question data will be stored
-    questions = {};
+    var questions = {};
 
     // The questions that's current displayed on screen
-    qIndex = 0;
+    var qIndex = 0;
 
-    var displayQuestion = function(q) {
-        $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
-        $("#mbQuestionMarks").text(q.fields.mark + " marks");
-    };
+    // The subject we are doing
+    var subject = 0;
 
-    function countdown(element, minutes, seconds) {
-        // http://jsfiddle.net/Apnu2/6/
-        var time = minutes*60 + seconds;
+    // The current question timer
+    var qTimer;
+
+    var countdown = function(element, minutes, seconds) {
+        /* based on http://jsfiddle.net/Apnu2/6/ */
+        var time = (minutes * 60 + seconds);
         var interval = setInterval(function() {
             var el = document.getElementById(element);
-            if(time == 0) {
-                el.innerHTML = "countdown's over!";    
+            if (time == 0) {
+                el.innerHTML = "0";    
                 clearInterval(interval);
                 return;
             }
@@ -149,18 +149,45 @@ $(document).ready(function() {
             el.innerHTML = text;
             time--;
         }, 1000);
-    }
+    }    
+        
+    var displayQuestion = function(q) {
+        $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
+        $("#mbQuestionMarks").text(q.fields.mark + " marks");
+        if (parseInt(q.fields.mark) > 0) {
+            switch (parseInt(subject)) {
+                case 2:
+                    // 2 Unit question
+                    delete qTimer;
+                    qTimer = countdown('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
+                    break;
+                case 3:
+                    // 3 Unit question
+                    delete qTimer;
+                    qTimer = countdown('mbQuestionTimer', (120/84 * parseInt(q.fields.mark)), 0);
+                    break;
+                case 4:
+                    // 4 Unit question
+                    delete qTimer;
+                    qTimer = countdown('mbQuestionTimer', (180/120 * parseInt(q.fields.mark)), 0);
+                    break;
+            }
+        }
+    };
 
     // When someone clicks begin, we start
     // ask for questions and return a JSON obj
     $("#mbBegin").click(function() {
 
         // What subject are we doing?
-        var subject = $("#subject").val();
+        subject = $("#subject").val();
 
         // Change our UI elements
         $("#mbSelectSubject").hide().fadeOut("slow");
         $("#mbNavQuestions").removeClass("hidden");
+        $("#mbExamTimerHeader").removeClass("hidden");
+        $("#mbQuestionTimerHeader").removeClass("hidden");
+        $("#mbButtonHR").removeClass("hidden");
 
         var DATAURL = "/buildexam/?subject=" + subject;
 
@@ -177,15 +204,9 @@ $(document).ready(function() {
         displayQuestion(questions[qIndex]);
 
         // set the count down timer for the exam
-        if (parseInt(subject) === 2) { 
-            countdown('mbExamTimer', 180, 0);
-        }
-        if (parseInt(subject) === 3) {
-            countdown('mbExamTimer', 120, 0);
-        }
-        if (parseInt(subject) === 4) {
-            countdown('mbExamTimer', 120, 0);
-        }
+        if (parseInt(subject) === 2) countdown('mbExamTimer', 180, 0);
+        if (parseInt(subject) === 3) countdown('mbExamTimer', 120, 0);
+        if (parseInt(subject) === 4) countdown('mbExamTimer', 120, 0);
 
     });
 
