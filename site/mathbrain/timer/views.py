@@ -76,7 +76,6 @@ def index(request):
 
 def buildexam(request, subject):
     if request.method == 'GET':
-        # subject = request.GET.get('subject')
         if subject:
             if subject.isdigit():
                 data = serializers.serialize('json', questionset(subject))
