@@ -1,7 +1,6 @@
 import os
 import settings
 
-from socket import getfqdn
 from django.conf.urls import patterns, include, url
 from django.views.generic.simple import direct_to_template
 
@@ -27,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^exam/$', direct_to_template, {'template': 'timer.html', } ),
 )
 
-if settings.DEBUG and (socket.getfqdn() is not 'newton'):
+if settings.DEBUG:
     urlpatterns += patterns('',
         (r'^css/(?P<path>.*)$', 'django.views.static.serve', {'document_root':
             os.path.abspath(os.path.join('static/css/'))}),
