@@ -41,6 +41,7 @@ def deploy():
     production()
 
     with cd(env.approot):
+        run('git checkout -- site/mathbrain/mathbrain/settings.py')
         run('git pull')
 
     with cd(env.coderoot):
@@ -54,7 +55,6 @@ def deploy():
                 'Debug = True',
                 'Debug = False', 
                 use_sudo=False, 
-                backup='/tmp/settings.py.bak',
                 flags='') 
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
