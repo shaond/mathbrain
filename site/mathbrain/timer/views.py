@@ -74,11 +74,11 @@ def index(request):
                 return HttpResponse(data, mimetype='application/json')
         return HttpResponse("Error", mimetype='application/json')
 
-def buildexam(request):
+def buildexam(request, subject):
     if request.method == 'GET':
-        subject = request.GET.get('subject')
+        # subject = request.GET.get('subject')
         if subject:
             if subject.isdigit():
                 data = serializers.serialize('json', questionset(subject))
                 return HttpResponse(data, mimetype='application/json')
-        return HttpResponse("Error", mimetype='application/json')
+        return HttpResponse("Error, subject: %s" % subject, mimetype='application/json')
