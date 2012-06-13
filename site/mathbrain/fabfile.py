@@ -8,6 +8,8 @@ from fabric.contrib import *
 from fabric.context_managers import *
 from fabric.utils import *
 
+from fabric.contrib.files import sed
+
 
 def localhost():
     env.hosts = ['localhost']
@@ -48,6 +50,12 @@ def deploy():
         run('python manage.py dumpdata --indent=2 > /tmp/mathbrain-dbdump.json')
         run('python manage.py syncdb')
         run('python manage.py collectstatic --noinput')
+        sed('/home/mathbrain/mathbrain/site/mathbrain/mathbrain/settings.py', 
+                'Debug = True',
+                'Debug = False', 
+                use_sudo=False, 
+                backup='/tmp/settings.py.bak',
+                flags='') 
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
                 ' outlog=/var/log/mathbrain/access.log' \
