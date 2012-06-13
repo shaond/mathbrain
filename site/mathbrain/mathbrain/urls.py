@@ -19,6 +19,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    # Account registration
+    url(r'^account/signup/$', 'registration.views.index'),
+
     # Timer App
     url(r'^examtimer/$', 'timer.views.index'),
     url(r'^buildexam/$', 'timer.views.buildexam'),
