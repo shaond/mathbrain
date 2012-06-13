@@ -70,10 +70,10 @@
         <div class="span-4">
             <!-- The JS time goes here -->
             <h1 id="mbQuestionMarks"><h1>
-            <h2 id="mbExamTimerHeader" class="hidden">Total time left</h2>
-            <h1 id="mbExamTimer" class="blue"></h1>
-            <h3 id="mbQuestionTimerHeader" class="hidden">Time spent on this question</h3>
+            <h1 id="mbQuestionTimerHeader" class="hidden">Allocated time</h1>
             <h1 id="mbQuestionTimer" class="red"></h1>
+            <h3 id="mbExamTimerHeader" class="hidden">Total time left</h3>
+            <h3 id="mbExamTimer" class="blue"></h3>
 
             <hr id="mbButtonHR" class="hidden">
 
@@ -134,7 +134,25 @@ $(document).ready(function() {
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
         $("#mbQuestionTimer").countdown('destroy');
-        $("#mbQuestionTimer").countdown({since: 'now', compact: true, format: 'MS'});
+        // $("#mbQuestionTimer").countdown({since: 'now', compact: true, format: 'MS'});
+
+        if (parseInt(q.fields.mark) > 0) {
+            switch (parseInt(subject)) {
+                case 2:
+                    // 2 Unit question
+                    $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                    break;
+                case 3:
+                    // 3 Unit question
+                    $("#mbQuestionTimer").countdown({until: (120/84 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                    break;
+                case 4:
+                    // 4 Unit question
+                    $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                    break;
+            }
+        }
+        
     };
 
     // When someone clicks begin, we start
