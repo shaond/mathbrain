@@ -52,6 +52,8 @@
         <!-- exam question -->
         <div class="span-8">
             <!-- actual question image -->
+            <h1 id="mbQuestionHeading"></h1>
+            <br />
             <p class="question border center">
                 <img id="mbQuestionImg" class="center" src="/img/mathbrain.png" alt="Exam question" />
                 
@@ -133,8 +135,8 @@ $(document).ready(function() {
     var displayQuestion = function(q) {
         $("#mbQuestionImg").attr("src", "/" + q.fields.question_img);
         $("#mbQuestionMarks").text(q.fields.mark + " marks");
+        $("#mbQuestionHeading").text("Question " + q.fields.num);
         $("#mbQuestionTimer").countdown('destroy');
-        // $("#mbQuestionTimer").countdown({since: 'now', compact: true, format: 'MS'});
 
         if (parseInt(q.fields.mark) > 0) {
             switch (parseInt(subject)) {
