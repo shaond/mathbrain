@@ -33,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Math Brain</a>
+          <a class="brand" href="/">Math Brain</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="/">Home</a></li>
@@ -52,7 +52,8 @@
            <img id="launchpage-icon" src="/img/mathbrain.png" alt="Smart Owl" height="200" width="200">
           <h1 class="launch-page-heading">Practice makes perfect</h1>
           <div class="signup-about-panel">
-              <p>The best way to get better at maths is to <i>practice</i> more. Sign up and test for yourself.</p>
+              <p>The best way to get better at maths is to <b><i>practice</i></b> more.
+<a href="#signup_form">Sign up</a> and test for yourself!</p>
           </div>
           <div class="signup-about-video">
               <h2>How does Math Brain work?</h2>
@@ -63,7 +64,7 @@
                   <form id="signup_form" method="post" action="/account/signup/" autocapitalize="off">
                       <div style="display:none">{% csrf_token %}</div>
                       <input id="iemail" name="email_registration" placeholder="youremail@email.com" type="text">
-                      <button type="submit" class="btn btn-primary btn-large">Sign me up!</button>
+                      <button type="submit" class="btn btn-primary btn-large sign-up-btn">Sign me up!</button>
                   </form>
             
                   <!--p id="disclaimer">By clicking "Sign me up", you agree to the <a href="/about/terms/">Terms of Use</a> and <a href="/about/privacy/">Privacy Policy</a>.</p-->

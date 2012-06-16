@@ -58,6 +58,7 @@ p.launchpage {
 .signup-about-video h2 {
   font-size: 36px;
   margin-bottom: 5px;
+  margin-left: 60px;
 }
 
 .signup-about-panel {
@@ -74,7 +75,7 @@ p.launchpage {
 }
 
 .signup-panel {
-  width: 600px;
+  width: 650px;
   margin-left: 230px;
   display: block;
 }
@@ -104,20 +105,29 @@ p.left-panel {
   font-size: 16px;
   margin-top: 20px;
   margin-left: 30px;
+  width: 390px;
 }
 
 .launch-page-heading {
   margin-top: 38px;
 }
 
+.btn-large {
+  height: 50px;
+  width: 150px;
+  padding: 0px;
+  font-size: 22px;
+}
+
 #mbQuestionTimer{
   font-size: 40px;
 }
 
-#iemail { width: 300px; height: 25px; padding: 12px 8px 12px 8px; margin-right: 10px; font-size: 20px; line-height: 25px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
+#iemail { width: 450px; height: 25px; padding: 12px 8px 12px 8px; margin-bottom: 0px; margin-right: 10px; font-size: 20px; line-height: 25px; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; }
 #disclaimer { font-size: 13px; width: 480px; margin-left:0px; }
 #support { font-size: 13px; width: 480px; margin-left:0px;margin-top:0px; }
 #launchpage-icon{ float: left; }
+#signup_form{ padding-top: 5px; }
 
 
 
