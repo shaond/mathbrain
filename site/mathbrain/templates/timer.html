@@ -123,6 +123,13 @@
 
 <!-- event handling -->
 <script>
+
+window.onbeforeunload = function() {
+    if ($('#mbExamTimer').length) {
+        recordTotalTime($('#mbExamTimer span').text());
+    }   
+}
+
 $(document).ready(function() {
 
     // Returned question data will be stored
@@ -140,67 +147,141 @@ $(document).ready(function() {
         $("#mbQuestionHeading").text("Question " + q.fields.num);
         $("#mbQuestionTimer").countdown('destroy');
 
-        if (parseInt(q.fields.mark) > 0) {
-            switch (parseInt(subject)) {
-                case 2:
-                    // 2 Unit question
-                    $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                    break;
-                case 3:
-                    // 3 Unit question
-                    $("#mbQuestionTimer").countdown({until: (120/84 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                    break;
-                case 4:
-                    // 4 Unit question
-                    $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                    break;
+
+        // Check if there is q_fields_question_img already in DB
+        if (localStorage) {
+            if (localStorage.getItem(q.fields.question_img)) {
+                if (parseInt(q.fields.mark) > 0) {
+                    var minutes = localStorage.getItem(q.fields.question_img).substring(0, 2);
+                    var seconds = localStorage.getItem(q.fields.question_img).substring(3, localStorage.getItem(q.fields.question_img).length);
+                    var question_time = parseInt(minutes)*60+parseInt(seconds);
+                    switch (parseInt(subject)) {
+                        case 2:
+                            // 2 Unit question
+                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
+                            break;
+                        case 3:
+                            // 3 Unit question
+                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
+                            break;
+                        case 4:
+                            // 4 Unit question
+                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
+                            break;
+                    }
+                }
+            }
+            else {
+                if (parseInt(q.fields.mark) > 0) {
+                    switch (parseInt(subject)) {
+                        case 2:
+                            // 2 Unit question
+                            $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                            break;
+                        case 3:
+                            // 3 Unit question
+                            $("#mbQuestionTimer").countdown({until: (120/84 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                            break;
+                        case 4:
+                            // 4 Unit question
+                            $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                            break;
+                    }
+                }
             }
         }
-        
     };
 
     // When someone clicks begin, we start
     // ask for questions and return a JSON obj
-    $("#mbBegin").click(function() {
+    if (localStorage) {
+        if (!localStorage.getItem('total_time')) {
+            $("#mbBegin").click(function() {
 
-        // What subject are we doing?
-        subject = $("#subject").val();
+                // What subject are we doing?
+                subject = $("#subject").val();
 
-        // Change our UI elements
-        $("#mbSelectSubject").hide().fadeOut("slow");
-        $("#mbNavQuestions").removeClass("hidden");
-        $("#mbExamTimerHeader").removeClass("hidden");
-        $("#mbQuestionTimerHeader").removeClass("hidden");
-        $("#mbButtonHR").removeClass("hidden");
+                // Change our UI elements
+                $("#mbSelectSubject").hide().fadeOut("slow");
+                $("#mbNavQuestions").removeClass("hidden");
+                $("#mbExamTimerHeader").removeClass("hidden");
+                $("#mbQuestionTimerHeader").removeClass("hidden");
+                $("#mbButtonHR").removeClass("hidden");
 
-        var DATAURL = "/buildexam/" + subject;
+                var DATAURL = "/buildexam/" + subject;
 
-        $.ajax({
-            url: DATAURL,
-            async: false,
-            dataType: 'json',
-            success: function(data) {
-                questions = data;
-            }
-        });
+                $.ajax({
+                    url: DATAURL,
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        questions = data;
+                    }
+                });
 
-        // save questions to local storage
-        saveQuestions(questions);
-    
-        // display the first question
-        displayQuestion(questions[qIndex]);
+                // save questions to local storage
+                saveQuestions(questions);
+            
+                // display the first question
+                displayQuestion(questions[qIndex]);
 
-        // pre-fetch
-        prefetchImages(questions);
+                // pre-fetch
+                prefetchImages(questions);
 
-        // set the count down timer for the exam
-        if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
-        if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
-        if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+                // set the count down timer for the exam
+                if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+                if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
+                if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
 
-    });
+            });
+        }
+        else { // Get current question from localStore & time they are on
+            $("#mbBegin").click(function() {
+
+                // What subject are we doing?
+                subject = $("#subject").val();
+
+                // Change our UI elements
+                $("#mbSelectSubject").hide().fadeOut("slow");
+                $("#mbNavQuestions").removeClass("hidden");
+                $("#mbExamTimerHeader").removeClass("hidden");
+                $("#mbQuestionTimerHeader").removeClass("hidden");
+                $("#mbButtonHR").removeClass("hidden");
+
+                var DATAURL = "/buildexam/" + subject;
+
+                $.ajax({
+                    url: DATAURL,
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        questions = data;
+                    }
+                });
+
+                // save questions to local storage
+                saveQuestions(questions);
+            
+                // display the first question
+                displayQuestion(questions[qIndex]);
+
+                // pre-fetch
+                prefetchImages(questions);
+
+                // set the count down timer for the exam
+                if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+                if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
+                if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+
+            });
+        }
+    }
 
     $("#mbNext").click(function() {
+        // Store the current question in localStorage
+        var qid_img = $("#mbQuestionImg").attr("src");
+        recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
+
         if (qIndex < questions.length) {
             qIndex = qIndex + 1;
             displayQuestion(questions[qIndex]);
@@ -214,6 +295,10 @@ $(document).ready(function() {
     }); 
 
     $("#mbPrevious").click(function() { 
+        // Store the current question in localStorage
+        var qid_img = $("#mbQuestionImg").attr("src");
+        recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
+
         if (qIndex > 0) {
             qIndex = qIndex - 1;
             displayQuestion(questions[qIndex]);
