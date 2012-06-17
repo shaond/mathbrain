@@ -116,6 +116,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.2.min.js"><\/script>')</script>
 <script src="/js/libs/bootstrap/bootstrap.min.js"></script>
+<script src="/js/libs/bootstrap/modal.js"></script>
 <script src="/js/script.js"></script>
 
 <!-- http://keith-wood.name/countdown.html -->
@@ -124,9 +125,13 @@
 <!-- event handling -->
 <script>
 
+// The questions that's current displayed on screen
+var qIndex = 0;
+
 window.onbeforeunload = function() {
     if ($('#mbExamTimer').length) {
         recordTotalTime($('#mbExamTimer span').text());
+        recordLastState(qIndex, $("#mbNext").length, $("#mbPrevious").length);
     }   
 }
 
@@ -134,9 +139,6 @@ $(document).ready(function() {
 
     // Returned question data will be stored
     var questions = {};
-
-    // The questions that's current displayed on screen
-    var qIndex = 0;
 
     // The subject we are doing
     var subject = 0;
@@ -236,11 +238,24 @@ $(document).ready(function() {
             });
         }
         else { // Get current question from localStore & time they are on
-            $("#mbBegin").click(function() {
+            var confirmModal = 
+                  $('<div class="modal hide fade">' +    
+                      '<div class="modal-header">' +
+                        '<a class="close" data-dismiss="modal" >&times;</a>' +
+                        '<h3>Confirm Resume</h3>' +
+                      '</div>' +
 
-                // What subject are we doing?
-                subject = $("#subject").val();
+                      '<div class="modal-body">' +
+                        '<p>Do you want to resume from where you last left off?</p>' +
+                      '</div>' +
 
+                      '<div class="modal-footer">' +
+                        '<a href="#" id="cancel_resume" class="btn" data-dismiss="modal">No</a>' +
+                        '<a href="#" id="ok_resume" class="btn btn-primary">Yes</a>' +
+                      '</div>' +
+                    '</div>');
+
+            confirmModal.find('#ok_resume').click(function(event) {
                 // Change our UI elements
                 $("#mbSelectSubject").hide().fadeOut("slow");
                 $("#mbNavQuestions").removeClass("hidden");
@@ -248,32 +263,60 @@ $(document).ready(function() {
                 $("#mbQuestionTimerHeader").removeClass("hidden");
                 $("#mbButtonHR").removeClass("hidden");
 
-                var DATAURL = "/buildexam/" + subject;
-
-                $.ajax({
-                    url: DATAURL,
-                    async: false,
-                    dataType: 'json',
-                    success: function(data) {
-                        questions = data;
+                // display the last question user was on
+                if (localStorage) {
+                    questions = JSON.parse(localStorage.getItem("questions"));
+                    qIndex = parseInt(localStorage.getItem("last_qid"));
+                    if (parseInt(localStorage.getItem("nxt")) > 0) {
+                        $("#mbNext").show();
                     }
-                });
+                    if (parseInt(localStorage.getItem("prev")) > 0) {
+                        $("#mbPrevious").removeClass("hidden");
+                    }
+                    displayQuestion(questions[qIndex]);
 
-                // save questions to local storage
-                saveQuestions(questions);
-            
-                // display the first question
-                displayQuestion(questions[qIndex]);
+                    // set the count down timer for the exam
+                    var hours = localStorage.getItem("total_time").substring(0, 2);
+                    var minutes = localStorage.getItem("total_time").substring(3, 5);
+                    var seconds = localStorage.getItem("total_time").substring(6, localStorage.getItem("total_time").length);
+                    var total_time = parseInt(hours)*3600+parseInt(minutes)*60+parseInt(seconds);
+                    $("#mbExamTimer").countdown({until:total_time, compact: true, format: 'HMS'});
+                }
 
-                // pre-fetch
-                prefetchImages(questions);
+                // pre-fetch - assume imgs are pre-fetched for now
+                // prefetchImages(questions);
 
-                // set the count down timer for the exam
-                if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
-                if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
-                if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
 
+                confirmModal.modal('hide');
             });
+
+            confirmModal.find('#cancel_resume').click(function(event) {
+                $("#mbBegin").click(function() {
+
+                    // What subject are we doing?
+                    subject = $("#subject").val();
+
+                    // Change our UI elements
+                    $("#mbSelectSubject").hide().fadeOut("slow");
+                    $("#mbNavQuestions").removeClass("hidden");
+                    $("#mbExamTimerHeader").removeClass("hidden");
+                    $("#mbQuestionTimerHeader").removeClass("hidden");
+                    $("#mbButtonHR").removeClass("hidden");
+
+                    var DATAURL = "/buildexam/" + subject;
+
+                    $.ajax({
+                        url: DATAURL,
+                        async: false,
+                        dataType: 'json',
+                        success: function(data) {
+                            questions = data;
+                        }
+                    });
+                });
+            });
+
+            confirmModal.modal('show');
         }
     }
 
