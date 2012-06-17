@@ -131,7 +131,9 @@ var qIndex = 0;
 window.onbeforeunload = function() {
     if ($('#mbExamTimer').length) {
         recordTotalTime($('#mbExamTimer span').text());
-        recordLastState(qIndex, $("#mbNext").length, $("#mbPrevious").length);
+        recordLastState(qIndex, !$("#mbNext").is(':hidden'), !$("#mbPrevious").is(':hidden'));
+        var qid_img = $("#mbQuestionImg").attr("src");
+        recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
     }   
 }
 
@@ -157,20 +159,8 @@ $(document).ready(function() {
                     var minutes = localStorage.getItem(q.fields.question_img).substring(0, 2);
                     var seconds = localStorage.getItem(q.fields.question_img).substring(3, localStorage.getItem(q.fields.question_img).length);
                     var question_time = parseInt(minutes)*60+parseInt(seconds);
-                    switch (parseInt(subject)) {
-                        case 2:
-                            // 2 Unit question
-                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
-                            break;
-                        case 3:
-                            // 3 Unit question
-                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
-                            break;
-                        case 4:
-                            // 4 Unit question
-                            $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
-                            break;
-                    }
+                    $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
+                    subject = q.fields.subject; 
                 }
             }
             else {
@@ -267,11 +257,17 @@ $(document).ready(function() {
                 if (localStorage) {
                     questions = JSON.parse(localStorage.getItem("questions"));
                     qIndex = parseInt(localStorage.getItem("last_qid"));
-                    if (parseInt(localStorage.getItem("nxt")) > 0) {
+                    if (localStorage.getItem("nxt") == "true") {
                         $("#mbNext").show();
                     }
-                    if (parseInt(localStorage.getItem("prev")) > 0) {
+                    else {
+                        $("#mbNext").hide();
+                    }
+                    if (localStorage.getItem("prev") == "true") {
                         $("#mbPrevious").removeClass("hidden");
+                    }
+                    else {
+                        $("#mbPrevious").addClass("hidden");
                     }
                     displayQuestion(questions[qIndex]);
 
@@ -313,6 +309,20 @@ $(document).ready(function() {
                             questions = data;
                         }
                     });
+
+                    // save questions to local storage
+                    saveQuestions(questions);
+                
+                    // display the first question
+                    displayQuestion(questions[qIndex]);
+
+                    // pre-fetch
+                    prefetchImages(questions);
+
+                    // set the count down timer for the exam
+                    if (parseInt(subject) === 2) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
+                    if (parseInt(subject) === 3) $("#mbExamTimer").countdown({until: '120m', compact: true, format: 'HMS'});
+                    if (parseInt(subject) === 4) $("#mbExamTimer").countdown({until: '180m', compact: true, format: 'HMS'});
                 });
             });
 
