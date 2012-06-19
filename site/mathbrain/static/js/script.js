@@ -9,19 +9,14 @@ var saveQuestions = function(questions) {
 
 var prefetchImages = function(questions) {
     // prefetch all images for this exam
-    URL = '/questions/';
     if (questions.length > 0) {
-        for (var i; i < questions.length; i++) {
+        for (var i = 0; i < questions.length; i++) {
             $.ajax({
-		url: URL + questions[i].fields.img, 
-		cache: true, 
-		async: true, 
+            url: "/" + questions[i].fields.question_img, 
+            cache: true, 
+            async: true, 
 	        success: function() {
-		   //Insert into the DOM but display as NONE 
-		   //This 'caches' image in DOM so when it's called it is available 
-		   //$(this).
-
-	    }});        
+		    }});        
         }
     }
 };
