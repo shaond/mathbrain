@@ -51,7 +51,7 @@
 
     <div class="container">
 
-      <div class="row">
+      <div id="question_container" class="row">
 
         <!-- exam question -->
         <div class="span-8">
@@ -99,8 +99,7 @@
                 <p id="mbNav" class="">
                     <button id="mbPrevious" class="btn btn-primary btn-large hidden">&laquo; Previous</button>
                     <button id="mbNext" class="btn btn-primary btn-large">Next &raquo;</button>
-                    <!-- <a id="mbFinish" class="btn btn-primary btn-large
-                        hidden">Finished</a> -->
+                    <button id="mbFinish" class="btn btn-primary btn-large btn-danger hidden">Finished!</button>
                 </p>
             </span>
         </div>
@@ -108,7 +107,10 @@
         <!-- End the right hand sidebar -->
 
       </div>
-      <!-- / row -->
+      <!-- / question_container -->
+      <div id="reportcard_container" class="row hidden">
+      </div>
+      <!-- / reportcard_container -->
 
       <hr>
       <footer>
@@ -263,9 +265,11 @@ $(document).ready(function() {
                     qIndex = parseInt(localStorage.getItem("last_qid"));
                     if (localStorage.getItem("nxt") == "true") {
                         $("#mbNext").show();
+                        $("#mbFinish").addClass("hidden");
                     }
                     else {
                         $("#mbNext").hide();
+                        $("#mbFinish").removeClass("hidden");
                     }
                     if (localStorage.getItem("prev") == "true") {
                         $("#mbPrevious").removeClass("hidden");
@@ -345,6 +349,7 @@ $(document).ready(function() {
         }
         if (qIndex === (questions.length - 1)) {
             $("#mbNext").hide();
+            $("#mbFinish").removeClass("hidden");
         }
         if (qIndex > 0) {
             $("#mbPrevious").removeClass("hidden");
@@ -362,10 +367,16 @@ $(document).ready(function() {
         }
         if (qIndex !== (questions.length - 1)) {
             $("#mbNext").show();
+            $("#mbFinish").addClass("hidden");
         }
         if (qIndex === 0) {
             $("#mbPrevious").addClass("hidden");
         }
+    });
+
+    $("#mbFinish").click(function() { 
+        // Gather all stats from questions in localStorage
+        reportCard();
     });
 
 });

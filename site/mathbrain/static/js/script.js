@@ -45,3 +45,36 @@ var recordLastState = function(qid, nxt, prev) {
         localStorage.setItem("prev", prev);
     }
 };
+
+var reportCard = function() {
+    if (localStorage) {
+        // Get all values who's key starts with "questions/"
+	var totalTime = localStorage.getItem("total_time");
+	var subject = JSON.parse(localStorage.getItem("questions"))[0].fields.subject;
+	var allocatedTime = [];
+	var qnTime = [];
+        for (var key in localStorage) {
+            if (key.match(/^questions\/[0-9]/)) {
+                qnTime.push(localStorage.getItem(key));
+	        switch (parseInt(subject)) {
+		    case 2:
+		        // 2 Unit question
+                        allocatedTime.push(parseInt(key.split("_")[4].split("m")[0]) * 180/120 * 60);
+		        break;
+		    case 3:
+		        // 3 Unit question
+                        allocatedTime.push(parseInt(key.split("_")[4].split("m")[0]) * 120/84 * 60);
+		        break;
+		    case 4:
+		        // 4 Unit question
+                        allocatedTime.push(parseInt(key.split("_")[4].split("m")[0]) * 180/120 * 60);
+		    break;
+	        }
+            }
+        }
+
+        // Show the report card and hide the questions
+        $("#question_container").hide();
+        $("#reportcard_container").removeClass("hidden");
+    }
+};
