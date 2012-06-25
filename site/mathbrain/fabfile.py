@@ -25,7 +25,6 @@ def production():
 
 def start():
     localhost()
-    local('git pull')
     local('python manage.py runserver', capture=False)
 
 
