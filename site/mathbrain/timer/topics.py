@@ -46,4 +46,5 @@ class FourUnit:
               "Integration", 
               "Volumes", 
               "Mechanics", 
-              "Polynomials"]
+              "Polynomials",
+              "Harder 3U topics"]

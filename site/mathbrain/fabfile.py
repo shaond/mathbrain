@@ -2,6 +2,7 @@ import socket
 import os
 import pwd
 import getpass
+import datetime
 
 from fabric.api import *
 from fabric.contrib import *
@@ -24,7 +25,6 @@ def production():
 
 def start():
     localhost()
-    local('git pull')
     local('python manage.py runserver', capture=False)
 
 
@@ -40,20 +40,28 @@ def virtualenv(command):
 def deploy():
     production()
 
-    with cd(env.approot):
-        run('git checkout -- site/mathbrain/mathbrain/settings.py')
-        run('git pull')
+    today = str(datetime.date.today())
 
     with cd(env.coderoot):
         with settings(warn_only=True):
             run('kill -9 `cat /tmp/django.pid`')
             run('rm /tmp/django.pid')
-        run('python manage.py dumpdata --indent=2 > /tmp/mathbrain-dbdump.json')
+        run('python manage.py dumpdata registration --indent=2 > ' \
+            '/tmp/mathbrain-registration-dbdump-%s.json' % today)
+        run('git checkout mathbrain.db')
+
+    with cd(env.approot):
+        run('git checkout -- site/mathbrain/mathbrain/settings.py')
+        run('git pull')
+
+    with cd(env.coderoot):
         run('python manage.py syncdb')
         run('python manage.py collectstatic --noinput')
         sed('/home/mathbrain/mathbrain/site/mathbrain/mathbrain/settings.py', 
                 '^DEBUG = True$',
                 'DEBUG = False') 
+        run('python manage.py loaddata ' \
+            '/tmp/mathbrain-registration-dbdump-%s.json' % today)
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
                 ' outlog=/var/log/mathbrain/access.log' \
