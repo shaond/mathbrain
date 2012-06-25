@@ -2,6 +2,7 @@ import socket
 import os
 import pwd
 import getpass
+import datetime
 
 from fabric.api import *
 from fabric.contrib import *
@@ -40,6 +41,8 @@ def virtualenv(command):
 def deploy():
     production()
 
+    today = str(datetime.date.today())
+
     with cd(env.approot):
         run('git checkout -- site/mathbrain/mathbrain/settings.py')
         run('git pull')
@@ -48,12 +51,15 @@ def deploy():
         with settings(warn_only=True):
             run('kill -9 `cat /tmp/django.pid`')
             run('rm /tmp/django.pid')
-        run('python manage.py dumpdata --indent=2 > /tmp/mathbrain-dbdump.json')
+        run('python manage.py dumpdata registration --indent=2 > ' \
+            '/tmp/mathbrain-registration-dbdump-%s.json' % today)
         run('python manage.py syncdb')
         run('python manage.py collectstatic --noinput')
         sed('/home/mathbrain/mathbrain/site/mathbrain/mathbrain/settings.py', 
                 '^DEBUG = True$',
                 'DEBUG = False') 
+        run('python manage.py loaddata ' \
+            '/tmp/mathbrain-registration-dbdump-%s.json' % today)
         run('python manage.py runfcgi method=threaded host=127.0.0.1' \
                 ' port=8000 pidfile=/tmp/django.pid' \
                 ' outlog=/var/log/mathbrain/access.log' \
