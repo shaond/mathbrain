@@ -17,15 +17,15 @@ def png_to_model(request):
         elif vals[0] == "3u":
             topic_vals = ThreeUnit.topics[int(topic_vals)]
         elif vals[0] == "4u":
-            topic_vals = FourUnit.topics[int(topic_vals)]
-        new_qn = Question(question_img="questions/"+filename, 
+            topic_vals = FourUnit.topics[int(topic_vals) - 1]
+        new_qn = Question.objects.get_or_create(question_img="questions/"+filename, 
                          num=int(vals[2][1:]), 
                          mark=int(vals[4].split("m")[0]), 
                          subject=int(vals[0][0]), 
                          source=vals[5], 
                          topic=topic_vals, 
                          pub_date=vals[1]+'-01-01')
-        new_qn.save()
+        # new_qn.save()
 
     return HttpResponse("Done", mimetype='application/json')
 
