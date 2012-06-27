@@ -238,8 +238,6 @@
 				</array>
 				<key>OutputUUID</key>
 				<string>45F3DCE0-56D8-428D-B7BD-EA90833ADA1A</string>
-				<key>StartAction</key>
-				<false/>
 				<key>UUID</key>
 				<string>60C86855-4576-4338-9CD2-E045CEDB8B56</string>
 				<key>UnlocalizedApplications</key>
@@ -275,7 +273,7 @@
 	</array>
 	<key>connectors</key>
 	<dict>
-		<key>5B788912-3E0E-4F83-859D-5A4FC9B6A2F5</key>
+		<key>F2E5BABD-B0B6-4125-BEED-B1432F675AD3</key>
 		<dict>
 			<key>from</key>
 			<string>6F3E44DD-FBBB-4D1C-BAB0-32AB79381AAF - 6F3E44DD-FBBB-4D1C-BAB0-32AB79381AAF</string>
