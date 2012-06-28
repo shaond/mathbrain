@@ -57,11 +57,11 @@ var reportCard = function() {
     if (localStorage) {
         // Get all values who's key starts with "questions/"
 	var totalTime = localStorage.getItem("total_time"); //Actually total time left on clock
-	var subject = JSON.parse(localStorage.getItem("questions"))[0].fields.subject;
+	var subject = parseInt(JSON.parse(localStorage.getItem("questions"))[0].fields.subject);
 	var allocatedTime = 0; // Accounts for when we don't get exactly the question marks due to small pool of questions
 
 	// Clear any recordCard calcs stored
-	switch (parseInt(subject)) {
+	switch (subject) {
 	    case 2:
 		// 2 Unit question
 		localStorage.removeItem("q1-allocatedTime");
@@ -135,43 +135,47 @@ var reportCard = function() {
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i).match(/^questions\/[0-9]/)) {
+		    var qnTimeLeft = 0;
 	        var minLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[0]);
-		var secLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[1]);
-		var qnTimeLeft = 0;
-	        if (localStorage.getItem(localStorage.key(i).split("_")[2]+"-totalLeft")) {
-		    qnTimeLeft = minLeft*60 + secLeft + parseInt(localStorage.getItem(localStorage.key(i).split("_")[2]+"-totalLeft"));
+		    var secLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[1]);
+		    var totalLeftValKey = localStorage.key(i).split("_")[2]+"-totalLeft";
+		    var totalLeftVal = localStorage.getItem(totalLeftValKey);
+	        if (totalLeftVal) {
+		    qnTimeLeft = minLeft*60 + secLeft + parseInt(totalLeftVal);
 	        }
 	        else {
 		    qnTimeLeft = minLeft*60 + secLeft;
 	        }
-	        localStorage.setItem(localStorage.key(i).split("_")[2]+"-totalLeft", qnTimeLeft);
+	        localStorage.setItem(totalLeftValKey, qnTimeLeft);
 
-	        switch (parseInt(subject)) {
+		    var allocatedTimeValKey = localStorage.key(i).split("_")[2]+"-allocatedTime";
+		    var allocatedMarkVal = parseInt(localStorage.key(i).split("_")[4].split("m")[0]);
+	        switch (subject) {
 		    case 2:
 		        // 2 Unit question
-			if (localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) + parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 180/120 * 60);
+			if (localStorage.getItem(allocatedTimeValKey)) {
+			    localStorage.setItem(allocatedTimeValKey, parseInt(localStorage.getItem(allocatedTimeValKey)) + allocatedMarkVal * 180/120 * 60);
 			}
 			else {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 180/120 * 60);
+			    localStorage.setItem(allocatedTimeValKey, allocatedMarkVal * 180/120 * 60);
 			}
 		        break;
 		    case 3:
 		        // 3 Unit question
-			if (localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) + parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 120/84 * 60);
+			if (localStorage.getItem(allocatedTimeValKey)) {
+			    localStorage.setItem(allocatedTimeValKey, parseInt(localStorage.getItem(allocatedTimeValKey)) + allocatedMarkVal * 120/84 * 60);
 			}
 			else {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 120/84 * 60);
+			    localStorage.setItem(allocatedTimeValKey, allocatedMarkVal * 120/84 * 60);
 			}
 		        break;
 		    case 4:
 		        // 4 Unit question
-			if (localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.getItem(localStorage.key(i).split("_")[2]+"-allocatedTime")) + parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 180/120 * 60);
+			if (localStorage.getItem(allocatedTimeValKey)) {
+			    localStorage.setItem(allocatedTimeValKey, parseInt(localStorage.getItem(allocatedTimeValKey)) + allocatedMarkVal * 180/120 * 60);
 			}
 			else {
-			    localStorage.setItem(localStorage.key(i).split("_")[2]+"-allocatedTime", parseInt(localStorage.key(i).split("_")[4].split("m")[0]) * 180/120 * 60);
+			    localStorage.setItem(allocatedTimeValKey, allocatedMarkVal * 180/120 * 60);
 			}
 		    break;
 	        }
@@ -180,22 +184,23 @@ var reportCard = function() {
 
         // Populate the data set for charting
 	var store = null;
-	switch (parseInt(subject)) {
+    var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
+	switch (subject) {
 	    case 2:
 		// 2 Unit question
 		store = new Ext.data.JsonStore({
 		    fields:['name', 'total'],
 		    data: [
-			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + 50},
-			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + 50},
-			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + 50},
-			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + 50},
-			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + 50},
-			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + 50},
-			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + 50},
-			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + 50},
-			{name:'Question Nine', total: localStorage.getItem("q9-allocatedTime") - parseInt(localStorage.getItem("q9-totalLeft")) + 50},
-			{name:'Question Ten', total: localStorage.getItem("q10-allocatedTime") - parseInt(localStorage.getItem("q10-totalLeft")) + 50}
+			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + fudgeFactor},
+			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + fudgeFactor},
+			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + fudgeFactor},
+			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + fudgeFactor},
+			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + fudgeFactor},
+			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + fudgeFactor},
+			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + fudgeFactor},
+			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + fudgeFactor},
+			{name:'Question Nine', total: localStorage.getItem("q9-allocatedTime") - parseInt(localStorage.getItem("q9-totalLeft")) + fudgeFactor},
+			{name:'Question Ten', total: localStorage.getItem("q10-allocatedTime") - parseInt(localStorage.getItem("q10-totalLeft")) + fudgeFactor}
 		    ]
 		});
 		break;
@@ -204,14 +209,14 @@ var reportCard = function() {
 		store = new Ext.data.JsonStore({
 		    fields:['name', 'total'],
 		    data: [
-			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + 50},
-			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + 50},
-			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + 50},
-			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + 50},
-			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + 50},
-			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + 50},
-			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + 50},
-			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + 50},
+			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + fudgeFactor},
+			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + fudgeFactor},
+			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + fudgeFactor},
+			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + fudgeFactor},
+			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + fudgeFactor},
+			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + fudgeFactor},
+			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + fudgeFactor},
+			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + fudgeFactor},
 		    ]
 		});
 		break;
@@ -220,22 +225,29 @@ var reportCard = function() {
 		store = new Ext.data.JsonStore({
 		    fields:['name', 'total'],
 		    data: [
-			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + 50},
-			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + 50},
-			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + 50},
-			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + 50},
-			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + 50},
-			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + 50},
-			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + 50},
-			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + 50},
-			{name:'Question Nine', total: localStorage.getItem("q9-allocatedTime") - parseInt(localStorage.getItem("q9-totalLeft")) + 50},
-			{name:'Question Ten', total: localStorage.getItem("q10-allocatedTime") - parseInt(localStorage.getItem("q10-totalLeft")) + 50}
+			{name:'Question One', total: localStorage.getItem("q1-allocatedTime") - parseInt(localStorage.getItem("q1-totalLeft")) + fudgeFactor},
+			{name:'Question Two', total: localStorage.getItem("q2-allocatedTime") - parseInt(localStorage.getItem("q2-totalLeft")) + fudgeFactor},
+			{name:'Question Three', total: localStorage.getItem("q3-allocatedTime") - parseInt(localStorage.getItem("q3-totalLeft")) + fudgeFactor},
+			{name:'Question Four', total: localStorage.getItem("q4-allocatedTime") - parseInt(localStorage.getItem("q4-totalLeft")) + fudgeFactor},
+			{name:'Question Five', total: localStorage.getItem("q5-allocatedTime") - parseInt(localStorage.getItem("q5-totalLeft")) + fudgeFactor},
+			{name:'Question Six', total: localStorage.getItem("q6-allocatedTime") - parseInt(localStorage.getItem("q6-totalLeft")) + fudgeFactor},
+			{name:'Question Seven', total: localStorage.getItem("q7-allocatedTime") - parseInt(localStorage.getItem("q7-totalLeft")) + fudgeFactor},
+			{name:'Question Eight', total: localStorage.getItem("q8-allocatedTime") - parseInt(localStorage.getItem("q8-totalLeft")) + fudgeFactor},
+			{name:'Question Nine', total: localStorage.getItem("q9-allocatedTime") - parseInt(localStorage.getItem("q9-totalLeft")) + fudgeFactor},
+			{name:'Question Ten', total: localStorage.getItem("q10-allocatedTime") - parseInt(localStorage.getItem("q10-totalLeft")) + fudgeFactor}
 		    ]
 		});
 	    break;
 	}
 
-        // Draw the reportcard
+    renderReportCard(store);
+    }
+};
+
+function renderReportCard(store) {
+    var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
+    
+    // Draw the reportcard
 	var chart = Ext.create('Ext.chart.Chart', {
 	    width: 600,
 	    height: 500,
@@ -259,7 +271,7 @@ var reportCard = function() {
 		listeners:{
 		    itemmousedown : function(obj) {
 			// We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
-			alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt(obj.storeItem.data['total']) - 50) + ' seconds');
+			alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt(obj.storeItem.data['total']) - fudgeFactor) + ' seconds');
 		    }
 		},
 		label: {
@@ -286,5 +298,4 @@ var reportCard = function() {
 
 	// Change cursor to mouse pointer when hovering over chart
 	$('div[id^=chart]').css("cursor", "pointer");  
-    }
-};
+}
