@@ -161,13 +161,13 @@ $(document).ready(function() {
 
         // Check if there is q_fields_question_img already in DB
         if (localStorage) {
+	    subject = q.fields.subject; 
             if (localStorage.getItem(q.fields.question_img)) {
                 if (parseInt(q.fields.mark) > 0) {
                     var minutes = localStorage.getItem(q.fields.question_img).substring(0, 2);
                     var seconds = localStorage.getItem(q.fields.question_img).substring(3, localStorage.getItem(q.fields.question_img).length);
                     var question_time = parseInt(minutes)*60+parseInt(seconds);
                     $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
-                    subject = q.fields.subject; 
                 }
             }
             else {
@@ -296,6 +296,9 @@ $(document).ready(function() {
             });
 
             confirmModal.find('#cancel_resume').click(function(event) {
+                // Clear localStoraage
+                localStorage.clear();
+
                 $("#mbBegin").click(function() {
 
                     // What subject are we doing?
@@ -376,6 +379,10 @@ $(document).ready(function() {
     });
 
     $("#mbFinish").click(function() { 
+        // Store the current question in localStorage
+        var qid_img = $("#mbQuestionImg").attr("src");
+        recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
+
         // Gather all stats from questions in localStorage
         reportCard();
     });

@@ -122,16 +122,16 @@ var reportCard = function() {
 		store = new Ext.data.JsonStore({
 		    fields:['name', 'total'],
 		    data: [
-			{name:'Question One', total: allocatedTime["q1-allocatedTime"] - totalLeft["q1-totalLeft"] + fudgeFactor},
-			{name:'Question Two', total: allocatedTime["q2-allocatedTime"] - totalLeft["q2-totalLeft"] + fudgeFactor},
-			{name:'Question Three', total: allocatedTime["q3-allocatedTime"] - totalLeft["q3-totalLeft"] + fudgeFactor},
-			{name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
-			{name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
-			{name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
-			{name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
-			{name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
-			{name:'Question Nine', total: allocatedTime["q9-allocatedTime"] - totalLeft["q9-totalLeft"] + fudgeFactor},
-			{name:'Question Ten', total: allocatedTime["q10-allocatedTime"] - totalLeft["q10-totalLeft"] + fudgeFactor}
+			{name:'Question One', total: totalLeft["q1-totalLeft"] + fudgeFactor},
+			{name:'Question Two', total: totalLeft["q2-totalLeft"] + fudgeFactor},
+			{name:'Question Three', total:totalLeft["q3-totalLeft"] + fudgeFactor},
+			{name:'Question Four', total: totalLeft["q4-totalLeft"] + fudgeFactor},
+			{name:'Question Five', total: totalLeft["q5-totalLeft"] + fudgeFactor},
+			{name:'Question Six', total: totalLeft["q6-totalLeft"] + fudgeFactor},
+			{name:'Question Seven', total: totalLeft["q7-totalLeft"] + fudgeFactor},
+			{name:'Question Eight', total: totalLeft["q8-totalLeft"] + fudgeFactor},
+			{name:'Question Nine', total: totalLeft["q9-totalLeft"] + fudgeFactor},
+			{name:'Question Ten', total: totalLeft["q10-totalLeft"] + fudgeFactor}
 		    ]
 		});
 		break;
@@ -180,8 +180,10 @@ function renderReportCard(store) {
     
     // Draw the reportcard
 	var chart = Ext.create('Ext.chart.Chart', {
-	    width: 600,
-	    height: 500,
+	    //width: 600,
+	    //height: 500,
+	    width: 700,
+	    height: 600,
 	    animate: true,
 	    shadow: true,
 	    store: store,
@@ -209,6 +211,7 @@ function renderReportCard(store) {
 		    field: 'name',
 		    display: 'rotate',
 		    contrast: true,
+		    minMargin: 100,
 		    font: '13px Arial'
 		}
 	    }], 
