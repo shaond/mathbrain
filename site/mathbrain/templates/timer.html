@@ -194,7 +194,8 @@ $(document).ready(function() {
     // When someone clicks begin, we start
     // ask for questions and return a JSON obj
     if (localStorage) {
-        if (!localStorage.getItem('total_time')) {
+        if (!localStorage.getItem('total_time') || localStorage.getItem('finish_exam')) {
+	    localStorage.removeItem('finish_exam');
             $("#mbBegin").click(function() {
 
                 // What subject are we doing?
@@ -382,6 +383,8 @@ $(document).ready(function() {
         // Store the current question in localStorage
         var qid_img = $("#mbQuestionImg").attr("src");
         recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
+        // Store the 
+	localStorage.setItem('finish_exam', '1');
 
         // Gather all stats from questions in localStorage
         reportCard();
