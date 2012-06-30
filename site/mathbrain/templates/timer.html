@@ -195,7 +195,8 @@ $(document).ready(function() {
     // ask for questions and return a JSON obj
     if (localStorage) {
         if (!localStorage.getItem('total_time') || localStorage.getItem('finish_exam')) {
-	    localStorage.removeItem('finish_exam');
+	    localStorage.clear();
+
             $("#mbBegin").click(function() {
 
                 // What subject are we doing?
