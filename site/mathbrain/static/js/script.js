@@ -66,112 +66,106 @@ var reportCard = function() {
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i).match(/^questions\/[0-9]/)) {
-		    var qnTimeLeft = 0;
-	        var minLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[0]);
-		    var secLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[1]);
-		    var totalLeftValKey = localStorage.key(i).split("_")[2]+"-totalLeft";
-		    //var totalLeftVal = localStorage.getItem(totalLeftValKey);
-	        if (totalLeft[totalLeftValKey]) {
-		    qnTimeLeft = minLeft*60 + secLeft + totalLeft[totalLeftValKey];
-	        }
-	        else {
-		    qnTimeLeft = minLeft*60 + secLeft;
-	        }
-	        totalLeft[totalLeftValKey] = qnTimeLeft;
+		        var qnTimeLeft = 0;
+                var minLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[0], 10);
+		        var secLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[1], 10);
+		        var totalLeftValKey = localStorage.key(i).split("_")[2]+"-totalLeft";
+		        //var totalLeftVal = localStorage.getItem(totalLeftValKey);
+	            if (totalLeft[totalLeftValKey]) {
+		            qnTimeLeft = minLeft*60 + secLeft + totalLeft[totalLeftValKey];
+	            }
+	            else {
+		            qnTimeLeft = minLeft*60 + secLeft;
+	            }
+	            totalLeft[totalLeftValKey] = qnTimeLeft;
 
-		    var allocatedTimeValKey = localStorage.key(i).split("_")[2]+"-allocatedTime";
-		    var allocatedMarkVal = parseInt(localStorage.key(i).split("_")[4].split("m")[0]);
-	        switch (subject) {
-		    case 2:
-		        // 2 Unit question
-			if (allocatedTime[allocatedTimeValKey]) {
-			    allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
-			}
-			else {
-			    allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
-			}
-		        break;
-		    case 3:
-		        // 3 Unit question
-			if (allocatedTime[allocatedTimeValKey]) {
-			    allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 120/84 * 60;
-			}
-			else {
-			    allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 120/84 * 60;
-			}
-		        break;
-		    case 4:
-		        // 4 Unit question
-			if (allocatedTime[allocatedTimeValKey]) {
-			    allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
-			}
-			else {
-			    allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
-			}
-		    break;
-	        }
+		        var allocatedTimeValKey = localStorage.key(i).split("_")[2]+"-allocatedTime";
+		        var allocatedMarkVal = parseInt(localStorage.key(i).split("_")[4].split("m")[0], 10);
+	            switch (subject) {
+		            case 2: // 2 Unit question
+			            if (allocatedTime[allocatedTimeValKey]) {
+			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
+			            }
+			            else {
+			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
+			            }
+		                break;
+		            case 3: // 3 Unit question
+			            if (allocatedTime[allocatedTimeValKey]) {
+			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 120/84 * 60;
+			            }
+			            else {
+			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 120/84 * 60;
+			            }
+		                break;
+		            case 4: // 4 Unit question
+			            if (allocatedTime[allocatedTimeValKey]) {
+			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
+			            }
+			            else {
+			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
+			            }
+		                break;
+	            }
             }
         }
 
         // Populate the data set for charting
-	var store = null;
-    var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
-	switch (subject) {
-	    case 2:
-		// 2 Unit question
-		store = new Ext.data.JsonStore({
-		    fields:['name', 'total'],
-		    data: [
-			{name:'Question One', total: totalLeft["q1-totalLeft"] + fudgeFactor},
-			{name:'Question Two', total: totalLeft["q2-totalLeft"] + fudgeFactor},
-			{name:'Question Three', total:totalLeft["q3-totalLeft"] + fudgeFactor},
-			{name:'Question Four', total: totalLeft["q4-totalLeft"] + fudgeFactor},
-			{name:'Question Five', total: totalLeft["q5-totalLeft"] + fudgeFactor},
-			{name:'Question Six', total: totalLeft["q6-totalLeft"] + fudgeFactor},
-			{name:'Question Seven', total: totalLeft["q7-totalLeft"] + fudgeFactor},
-			{name:'Question Eight', total: totalLeft["q8-totalLeft"] + fudgeFactor},
-			{name:'Question Nine', total: totalLeft["q9-totalLeft"] + fudgeFactor},
-			{name:'Question Ten', total: totalLeft["q10-totalLeft"] + fudgeFactor}
-		    ]
-		});
-		break;
-	    case 3:
-		// 3 Unit question
-		store = new Ext.data.JsonStore({
-		    fields:['name', 'total'],
-		    data: [
-			{name:'Question One', total: allocatedTime["q1-allocatedTime"] - totalLeft["q1-totalLeft"] + fudgeFactor},
-			{name:'Question Two', total: allocatedTime["q2-allocatedTime"] - totalLeft["q2-totalLeft"] + fudgeFactor},
-			{name:'Question Three', total: allocatedTime["q3-allocatedTime"] - totalLeft["q3-totalLeft"] + fudgeFactor},
-			{name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
-			{name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
-			{name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
-			{name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
-			{name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
-		    ]
-		});
-		break;
-	    case 4:
-		// 4 Unit question
-		store = new Ext.data.JsonStore({
-		    fields:['name', 'total'],
-		    data: [
-			{name:'Question One', total: allocatedTime["q1-allocatedTime"] - totalLeft["q1-totalLeft"] + fudgeFactor},
-			{name:'Question Two', total: allocatedTime["q2-allocatedTime"] - totalLeft["q2-totalLeft"] + fudgeFactor},
-			{name:'Question Three', total: allocatedTime["q3-allocatedTime"] - totalLeft["q3-totalLeft"] + fudgeFactor},
-			{name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
-			{name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
-			{name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
-			{name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
-			{name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
-			{name:'Question Nine', total: allocatedTime["q9-allocatedTime"] - totalLeft["q9-totalLeft"] + fudgeFactor},
-			{name:'Question Ten', total: allocatedTime["q10-allocatedTime"] - totalLeft["q10-totalLeft"] + fudgeFactor}
-		    ]
-		});
-	    break;
-	}
+	    var store = null;
+        var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
+        switch (subject) {
+            case 2: // 2 Unit question
+                store = new Ext.data.JsonStore({
+                    fields:['name', 'total'],
+                    data: [
+                    {name:'Question One', total: totalLeft["q1-totalLeft"] + fudgeFactor},
+                    {name:'Question Two', total: totalLeft["q2-totalLeft"] + fudgeFactor},
+                    {name:'Question Three', total:totalLeft["q3-totalLeft"] + fudgeFactor},
+                    {name:'Question Four', total: totalLeft["q4-totalLeft"] + fudgeFactor},
+                    {name:'Question Five', total: totalLeft["q5-totalLeft"] + fudgeFactor},
+                    {name:'Question Six', total: totalLeft["q6-totalLeft"] + fudgeFactor},
+                    {name:'Question Seven', total: totalLeft["q7-totalLeft"] + fudgeFactor},
+                    {name:'Question Eight', total: totalLeft["q8-totalLeft"] + fudgeFactor},
+                    {name:'Question Nine', total: totalLeft["q9-totalLeft"] + fudgeFactor},
+                    {name:'Question Ten', total: totalLeft["q10-totalLeft"] + fudgeFactor}
+                    ]
+                });
+                break;
+            case 3: // 3 Unit question
+                store = new Ext.data.JsonStore({
+                    fields:['name', 'total'],
+                    data: [
+                    {name:'Question One', total: allocatedTime["q1-allocatedTime"] - totalLeft["q1-totalLeft"] + fudgeFactor},
+                    {name:'Question Two', total: allocatedTime["q2-allocatedTime"] - totalLeft["q2-totalLeft"] + fudgeFactor},
+                    {name:'Question Three', total: allocatedTime["q3-allocatedTime"] - totalLeft["q3-totalLeft"] + fudgeFactor},
+                    {name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
+                    {name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
+                    {name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
+                    {name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
+                    {name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
+                    ]
+                });
+                break;
+            case 4: // 4 Unit question
+                store = new Ext.data.JsonStore({
+                    fields:['name', 'total'],
+                    data: [
+                    {name:'Question One', total: allocatedTime["q1-allocatedTime"] - totalLeft["q1-totalLeft"] + fudgeFactor},
+                    {name:'Question Two', total: allocatedTime["q2-allocatedTime"] - totalLeft["q2-totalLeft"] + fudgeFactor},
+                    {name:'Question Three', total: allocatedTime["q3-allocatedTime"] - totalLeft["q3-totalLeft"] + fudgeFactor},
+                    {name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
+                    {name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
+                    {name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
+                    {name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
+                    {name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
+                    {name:'Question Nine', total: allocatedTime["q9-allocatedTime"] - totalLeft["q9-totalLeft"] + fudgeFactor},
+                    {name:'Question Ten', total: allocatedTime["q10-allocatedTime"] - totalLeft["q10-totalLeft"] + fudgeFactor}
+                    ]
+                });
+                break;
+        }
 
-    renderReportCard(store);
+        renderReportCard(store);
     }
 };
 
@@ -204,7 +198,7 @@ function renderReportCard(store) {
 		listeners:{
 		    itemmousedown : function(obj) {
 			// We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
-			alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt(obj.storeItem.data['total']) - fudgeFactor) + ' seconds');
+			alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
 		    }
 		},
 		label: {
