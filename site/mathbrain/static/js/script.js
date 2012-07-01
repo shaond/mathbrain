@@ -141,8 +141,7 @@ var reportCard = function() {
                     {name:'Question Four', total: allocatedTime["q4-allocatedTime"] - totalLeft["q4-totalLeft"] + fudgeFactor},
                     {name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
                     {name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
-                    {name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
-                    {name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
+                    {name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor}
                     ]
                 });
                 break;
@@ -157,9 +156,7 @@ var reportCard = function() {
                     {name:'Question Five', total: allocatedTime["q5-allocatedTime"] - totalLeft["q5-totalLeft"] + fudgeFactor},
                     {name:'Question Six', total: allocatedTime["q6-allocatedTime"] - totalLeft["q6-totalLeft"] + fudgeFactor},
                     {name:'Question Seven', total: allocatedTime["q7-allocatedTime"] - totalLeft["q7-totalLeft"] + fudgeFactor},
-                    {name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor},
-                    {name:'Question Nine', total: allocatedTime["q9-allocatedTime"] - totalLeft["q9-totalLeft"] + fudgeFactor},
-                    {name:'Question Ten', total: allocatedTime["q10-allocatedTime"] - totalLeft["q10-totalLeft"] + fudgeFactor}
+                    {name:'Question Eight', total: allocatedTime["q8-allocatedTime"] - totalLeft["q8-totalLeft"] + fudgeFactor}
                     ]
                 });
                 break;
@@ -197,8 +194,49 @@ function renderReportCard(store) {
 		},
 		listeners:{
 		    itemmousedown : function(obj) {
-			// We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
-			alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
+                // We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
+                alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
+                /*var detailPanel = Ext.create('Ext.grid.Panel', {
+                    id: 'results-form',
+                    flex: 0.60,
+                    //store: store,
+                    title:'Question Breakdown Data',
+                    renderTo: 'reportcard_container',
+                    columns: [
+                        {
+                            id       :'question',
+                            text   : 'Question',
+                            flex: 1,
+                            sortable : true
+                            //dataIndex: 'question'
+                        },
+                        {
+                            text   : 'Time Spent',
+                            width    : 75,
+                            sortable : true,
+                            align: 'right'
+                            //dataIndex: 'growth %',
+                            //renderer: perc
+                        },
+                        {
+                            text   : 'Time Allocated',
+                            width    : 75,
+                            sortable : true,
+                            align: 'right'
+                            //dataIndex: 'product %',
+                            //renderer: perc
+                        },
+                        {
+                            text   : 'Answer',
+                            width    : 75,
+                            sortable : true,
+                            align: 'right'
+                            //dataIndex: 'market %',
+                            //renderer: perc
+                        }
+                    ],
+
+                });*/
 		    }
 		},
 		label: {
