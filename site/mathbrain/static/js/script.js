@@ -56,12 +56,12 @@ var recordLastState = function(qid, nxt, prev) {
 var reportCard = function() {
     if (localStorage) {
         // Get all values who's key starts with "questions/"
-	var totalTime = localStorage.getItem("total_time"); //Actually total time left on clock
-	var subject = parseInt(JSON.parse(localStorage.getItem("questions"))[0].fields.subject);
-	var allocatedTime = 0; // Accounts for when we don't get exactly the question marks due to small pool of questions
+        var totalTime = localStorage.getItem("total_time"); //Actually total time left on clock
+        var subject = parseInt(JSON.parse(localStorage.getItem("questions"))[0].fields.subject);
+        var allocatedTime = 0; // Accounts for when we don't get exactly the question marks due to small pool of questions
 
-    var allocatedTime = {}, totalLeft = {};
-	// Clear any recordCard calcs stored
+        // Clear any recordCard calcs stored
+        var allocatedTime = {}, totalLeft = {};
 
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
@@ -168,13 +168,15 @@ var reportCard = function() {
 
 function renderReportCard(store) {
     var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
+    var detailPanel = null;
     
     // Draw the reportcard
 	var chart = Ext.create('Ext.chart.Chart', {
+        id: 'time-spent-chart',
 	    //width: 600,
 	    //height: 500,
-	    width: 700,
-	    height: 600,
+	    width: 500,
+	    height: 400,
 	    animate: true,
 	    shadow: true,
 	    store: store,
@@ -195,12 +197,16 @@ function renderReportCard(store) {
 		listeners:{
 		    itemmousedown : function(obj) {
                 // We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
-                alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
-                /*var detailPanel = Ext.create('Ext.grid.Panel', {
+                //alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
+                if (detailPanel) {
+                    detailPanel.close();
+                }
+                detailPanel = Ext.create('Ext.grid.Panel', {
                     id: 'results-form',
                     flex: 0.60,
                     //store: store,
-                    title:'Question Breakdown Data',
+                    width: 700,
+                    title: obj.storeItem.data['name'] + ' Breakdown Data',
                     renderTo: 'reportcard_container',
                     columns: [
                         {
@@ -220,7 +226,7 @@ function renderReportCard(store) {
                         },
                         {
                             text   : 'Time Allocated',
-                            width    : 75,
+                            width    : 120,
                             sortable : true,
                             align: 'right'
                             //dataIndex: 'product %',
@@ -236,7 +242,7 @@ function renderReportCard(store) {
                         }
                     ],
 
-                });*/
+                });
 		    }
 		},
 		label: {
