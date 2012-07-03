@@ -62,15 +62,18 @@ var reportCard = function() {
 
         // Clear any recordCard calcs stored
         var allocatedTime = {}, totalLeft = {};
+        var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = q7 = {}, q8 = {}, q9 = {}, q10 = {};
 
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i).match(/^questions\/[0-9]/)) {
 		        var qnTimeLeft = 0;
-                var minLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[0], 10);
-		        var secLeft = parseInt(localStorage.getItem(localStorage.key(i)).split(":")[1], 10);
-		        var totalLeftValKey = localStorage.key(i).split("_")[2]+"-totalLeft";
-		        //var totalLeftVal = localStorage.getItem(totalLeftValKey);
+		        var keyLoc = localStorage.key(i);
+		        var itemVal = localStorage.getItem(keyLoc);
+                var minLeft = parseInt(itemVal.split(":")[0], 10);
+		        var secLeft = parseInt(itemVal.split(":")[1], 10);
+		        var questionType = keyLoc.split("_")[2];
+		        var totalLeftValKey = questionType+"-totalLeft";
 	            if (totalLeft[totalLeftValKey]) {
 		            qnTimeLeft = minLeft*60 + secLeft + totalLeft[totalLeftValKey];
 	            }
@@ -79,8 +82,8 @@ var reportCard = function() {
 	            }
 	            totalLeft[totalLeftValKey] = qnTimeLeft;
 
-		        var allocatedTimeValKey = localStorage.key(i).split("_")[2]+"-allocatedTime";
-		        var allocatedMarkVal = parseInt(localStorage.key(i).split("_")[4].split("m")[0], 10);
+		        var allocatedTimeValKey = keyLoc.split("_")[2]+"-allocatedTime";
+		        var allocatedMarkVal = parseInt(keyLoc.split("_")[4].split("m")[0], 10);
 	            switch (subject) {
 		            case 2: // 2 Unit question
 			            if (allocatedTime[allocatedTimeValKey]) {
@@ -98,13 +101,48 @@ var reportCard = function() {
 			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 120/84 * 60;
 			            }
 		                break;
-		            case 4: // 4 Unit question
+		            case 4: // Question 9
 			            if (allocatedTime[allocatedTimeValKey]) {
 			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
 			            }
 			            else {
 			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
 			            }
+		                break;
+	            }
+
+                // Extract values for the DetailedReportCard
+	            switch (questionType) {
+		            case 1: // Question 1
+			            // Assume each key unique (no need for conditional)
+                        q1[keyLoc] = itemVal;
+		                break;
+		            case 2: // Question 2
+                        q2[keyLoc] = itemVal;
+		                break;
+		            case 3: // Question 3
+                        q3[keyLoc] = itemVal;
+		                break;
+		            case 4: // Question 4
+                        q4[keyLoc] = itemVal;
+		                break;
+		            case 5: // Question 5
+                        q5[keyLoc] = itemVal;
+		                break;
+		            case 6: // Question 6
+                        q6[keyLoc] = itemVal;
+		                break;
+		            case 7: // Question 7
+                        q7[keyLoc] = itemVal;
+		                break;
+		            case 8: // Question 8
+                        q8[keyLoc] = itemVal;
+		                break;
+		            case 9: // Question 9
+                        q9[keyLoc] = itemVal;
+		                break;
+		            case 10: // Question 10
+                        q10[keyLoc] = itemVal;
 		                break;
 	            }
             }
