@@ -1,50 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+{% extends "base.html" %}
 
-	<title>2 Unit, Extension 1, Extension 2 Exam Timer - Math Brain (mathbrain.com.au)</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<meta name="viewport" content="width=device-width">
-
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<style>
-	body {
-	  padding-top: 60px;
-	  padding-bottom: 40px;
-	}
-	</style>
-	<link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
-	<link rel="stylesheet" href="/css/style.css">
-
-	<script src="/js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
-</head>
-<body>
-<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
-
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Math Brain</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="/">Home</a></li>
-              <li><a href="/exam">Exam Timer</a></li>
-              <li><a href="/pastexampapers">Past Exam Papers</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-
+{% block content %}
     <div class="container">
 
       <!-- Main hero unit for a primary marketing message or call to action -->
@@ -52,8 +8,8 @@
            <img id="launchpage-icon" src="/img/mathbrain.png" alt="Smart Owl" height="200" width="200">
           <h1 class="launch-page-heading">Practice makes perfect</h1>
           <div class="signup-about-panel">
-              <p>There is a problem with the registration.</p>
-              <p>Please contact <a href="mailto:support@mathbrain.com.au">support@mathbrain.com.au</a></p>
+              <p>There was a problem with the registration.</p>
+              <p>Please contact <a href="mailto:support@mathbrain.com.au">support@mathbrain.com.au</a> or use our feedback link on the left hand side.</p>
           </div>
       </div>
 
@@ -63,19 +19,5 @@
         <p>&copy; Math Brain 2012</p>
       </footer>
 
-    </div> <!-- /container -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="/js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-
-<script src="/js/libs/bootstrap/bootstrap.min.js"></script>
-
-<script src="/js/script.js"></script>
-<script>
-	var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-	g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-	s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
-
-</body>
-</html>
+  </div>
+{% endblock %}
