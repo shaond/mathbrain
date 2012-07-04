@@ -62,7 +62,10 @@ var reportCard = function() {
 
         // Clear any recordCard calcs stored
         var allocatedTime = {}, totalLeft = {};
-        var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = q7 = {}, q8 = {}, q9 = {}, q10 = {};
+        var QDetail = function(){id: null, timeSpent: null; timeAllocated: null; source: null;};
+        var QList = function(){var q1 = [],  q2 = [], q3=[], q4=[], q5=[], q6=[], q7=[], q8=[], q9=[], q10=[];};
+        //var q1 = [], q2 = [], q3 = [], q4 = [], q5 = [], q6 = q7 = [], q8 = [], q9 = [], q10 = [];
+        var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = {}, q7 = {}, q8 = {}, q9 = {}, q10 = {};
 
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
