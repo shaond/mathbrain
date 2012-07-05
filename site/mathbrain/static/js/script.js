@@ -2,6 +2,7 @@ Ext.require([
     'Ext.data.*',
     'Ext.chart.*',
     'Ext.grid.Panel',
+    'Ext.grid.RowNumberer',
     'Ext.layout.container.Column'
 ]);
 
@@ -67,6 +68,7 @@ var reportCard = function() {
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i).match(/^questions\/[0-9]/)) {
+		        var qnTime = 0;
 		        var qnTimeLeft = 0;
 		        var keyLoc = localStorage.key(i);
 		        var itemVal = localStorage.getItem(keyLoc);
@@ -74,11 +76,12 @@ var reportCard = function() {
 		        var secLeft = parseInt(itemVal.split(":")[1], 10);
 		        var questionType = keyLoc.split("_")[2];
 		        var totalLeftValKey = questionType+"-totalLeft";
+                qnTime = minLeft*60 + secLeft;
 	            if (totalLeft[totalLeftValKey]) {
-		            qnTimeLeft = minLeft*60 + secLeft + totalLeft[totalLeftValKey];
+		            qnTimeLeft = qnTime + totalLeft[totalLeftValKey];
 	            }
 	            else {
-		            qnTimeLeft = minLeft*60 + secLeft;
+		            qnTimeLeft = qnTime;
 	            }
 	            totalLeft[totalLeftValKey] = qnTimeLeft;
 
@@ -105,7 +108,11 @@ var reportCard = function() {
                 }
 
                 // Extract values for the DetailedReportCard
-                var qDetail = [keyLoc.split("_")[2][1] + " " + keyLoc.split("_")[3], itemVal, sprintf("%02f:%02f", Math.floor(allocAddedTime/60), Math.floor(allocAddedTime % 60)), keyLoc.split("_")[1] + " " + keyLoc.split("_")[5]];
+                var qSrc = "(Q" + keyLoc.split("_")[2][1] + keyLoc.split("_")[3] + ") " + keyLoc.split("_")[1] + " " + keyLoc.split("_")[5];
+                qnTime = Math.floor(allocAddedTime - qnTime);
+                if (qnTime < 1)
+                    qnTime = 0;
+                var qDetail = [keyLoc, itemVal, sprintf("%02f:%02f", Math.floor(qnTime/60), Math.floor(qnTime%60)), sprintf("%02f:%02f", Math.floor(allocAddedTime/60), Math.ceil(allocAddedTime%60)), qSrc];
 	            switch (questionType) {
 		            case "q1": // Question 1
 			            // Assume each key unique (no need for conditional)
@@ -270,6 +277,7 @@ function renderReportCard(store, qList) {
                     idIndex: 0,
                     fields: [
                        'id',
+                       'time_left',
                        'time_spent',
                        'time_allocated',
                        'source'
@@ -288,20 +296,29 @@ function renderReportCard(store, qList) {
                     title: obj.storeItem.data['name'] + ' Breakdown Data',
                     renderTo: 'reportcard_container',
                     columns: [
-                        {
+                        /*{
                             id       :'question',
                             text   : 'Question',
                             //flex: 1,
                             width    : 75,
                             sortable : true,
                             dataIndex: 'id'
-                        },
+                        },*/
+                        {xtype: 'rownumberer'},
                         {
                             text   : 'Time Spent',
                             width    : 75,
                             sortable : true,
                             align: 'right',
                             dataIndex: 'time_spent'
+                            //renderer: perc
+                        },
+                        {
+                            text   : 'Time Left',
+                            width    : 75,
+                            sortable : true,
+                            align: 'right',
+                            dataIndex: 'time_left'
                             //renderer: perc
                         },
                         {
@@ -314,7 +331,7 @@ function renderReportCard(store, qList) {
                         },
                         {
                             text   : 'Source',
-                            width    : 75,
+                            width    : 95,
                             sortable : true,
                             align: 'right',
                             dataIndex: 'source'
