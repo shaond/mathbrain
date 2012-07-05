@@ -63,7 +63,6 @@ var reportCard = function() {
         // Clear any recordCard calcs stored
         var allocatedTime = {}, totalLeft = {};
         var qList = {}, q1 = [], q2 = [], q3 = [], q4 = [], q5 = [], q6 = [], q7 = [], q8 = [], q9 = [], q10 = [];
-        //var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = {}, q7 = {}, q8 = {}, q9 = {}, q10 = {};
 
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
@@ -106,8 +105,7 @@ var reportCard = function() {
                 }
 
                 // Extract values for the DetailedReportCard
-                //var qDetail = {id: keyLoc, timeSpent: itemVal, timeAllocated: allocAddedTime, source: null};
-                var qDetail = [keyLoc, itemVal, allocAddedTime, null];
+                var qDetail = [keyLoc.split("_")[2][1] + " " + keyLoc.split("_")[3], itemVal, sprintf("%02f:%02f", Math.floor(allocAddedTime/60), Math.floor(allocAddedTime % 60)), keyLoc.split("_")[1] + " " + keyLoc.split("_")[5]];
 	            switch (questionType) {
 		            case "q1": // Question 1
 			            // Assume each key unique (no need for conditional)
@@ -219,8 +217,6 @@ function renderReportCard(store, qList) {
     // Draw the reportcard
 	var chart = Ext.create('Ext.chart.Chart', {
         id: 'time-spent-chart',
-	    //width: 600,
-	    //height: 500,
 	    width: 500,
 	    height: 400,
 	    animate: true,
@@ -295,7 +291,8 @@ function renderReportCard(store, qList) {
                         {
                             id       :'question',
                             text   : 'Question',
-                            flex: 1,
+                            //flex: 1,
+                            width    : 75,
                             sortable : true,
                             dataIndex: 'id'
                         },
