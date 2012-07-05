@@ -62,10 +62,8 @@ var reportCard = function() {
 
         // Clear any recordCard calcs stored
         var allocatedTime = {}, totalLeft = {};
-        var QDetail = function(){id: null, timeSpent: null; timeAllocated: null; source: null;};
-        var QList = function(){var q1 = [],  q2 = [], q3=[], q4=[], q5=[], q6=[], q7=[], q8=[], q9=[], q10=[];};
-        //var q1 = [], q2 = [], q3 = [], q4 = [], q5 = [], q6 = q7 = [], q8 = [], q9 = [], q10 = [];
-        var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = {}, q7 = {}, q8 = {}, q9 = {}, q10 = {};
+        var qList = {}, q1 = [], q2 = [], q3 = [], q4 = [], q5 = [], q6 = [], q7 = [], q8 = [], q9 = [], q10 = [];
+        //var q1 = {}, q2 = {}, q3 = {}, q4 = {}, q5 = {}, q6 = {}, q7 = {}, q8 = {}, q9 = {}, q10 = {};
 
         // Accumulate time left for each question 
         for(var i = 0; i < localStorage.length; i++) {
@@ -87,69 +85,76 @@ var reportCard = function() {
 
 		        var allocatedTimeValKey = keyLoc.split("_")[2]+"-allocatedTime";
 		        var allocatedMarkVal = parseInt(keyLoc.split("_")[4].split("m")[0], 10);
+		        var allocAddedTime = 0;
 	            switch (subject) {
 		            case 2: // 2 Unit question
-			            if (allocatedTime[allocatedTimeValKey]) {
-			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
-			            }
-			            else {
-			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
-			            }
+                        allocAddedTime = allocatedMarkVal * 180/120 * 60;
 		                break;
 		            case 3: // 3 Unit question
-			            if (allocatedTime[allocatedTimeValKey]) {
-			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 120/84 * 60;
-			            }
-			            else {
-			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 120/84 * 60;
-			            }
+                        allocAddedTime = allocatedMarkVal * 120/84 * 60;
 		                break;
-		            case 4: // Question 9
-			            if (allocatedTime[allocatedTimeValKey]) {
-			                allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocatedMarkVal * 180/120 * 60;
-			            }
-			            else {
-			                allocatedTime[allocatedTimeValKey] =  allocatedMarkVal * 180/120 * 60;
-			            }
+		            case 4: // 4 Unit question
+                        allocAddedTime = allocatedMarkVal * 180/120 * 60;
 		                break;
 	            }
 
+                if (allocatedTime[allocatedTimeValKey]) {
+                    allocatedTime[allocatedTimeValKey] = allocatedTime[allocatedTimeValKey] + allocAddedTime;
+                }
+                else {
+                    allocatedTime[allocatedTimeValKey] =  allocAddedTime;
+                }
+
                 // Extract values for the DetailedReportCard
+                //var qDetail = {id: keyLoc, timeSpent: itemVal, timeAllocated: allocAddedTime, source: null};
+                var qDetail = [keyLoc, itemVal, allocAddedTime, null];
 	            switch (questionType) {
-		            case 1: // Question 1
+		            case "q1": // Question 1
 			            // Assume each key unique (no need for conditional)
-                        q1[keyLoc] = itemVal;
+                        q1.push(qDetail);
 		                break;
-		            case 2: // Question 2
-                        q2[keyLoc] = itemVal;
+		            case "q2": // Question 2
+                        q2.push(qDetail);
 		                break;
-		            case 3: // Question 3
-                        q3[keyLoc] = itemVal;
+		            case "q3": // Question 3
+                        q3.push(qDetail);
 		                break;
-		            case 4: // Question 4
-                        q4[keyLoc] = itemVal;
+		            case "q4": // Question 4
+                        q4.push(qDetail);
 		                break;
-		            case 5: // Question 5
-                        q5[keyLoc] = itemVal;
+		            case "q5": // Question 5
+                        q5.push(qDetail);
 		                break;
-		            case 6: // Question 6
-                        q6[keyLoc] = itemVal;
+		            case "q6": // Question 6
+                        q6.push(qDetail);
 		                break;
-		            case 7: // Question 7
-                        q7[keyLoc] = itemVal;
+		            case "q7": // Question 7
+                        q7.push(qDetail);
 		                break;
-		            case 8: // Question 8
-                        q8[keyLoc] = itemVal;
+		            case "q8": // Question 8
+                        q8.push(qDetail);
 		                break;
-		            case 9: // Question 9
-                        q9[keyLoc] = itemVal;
+		            case "q9": // Question 9
+                        q9.push(qDetail);
 		                break;
-		            case 10: // Question 10
-                        q10[keyLoc] = itemVal;
+		            case "q10": // Question 10
+                        q10.push(qDetail);
 		                break;
 	            }
             }
         }
+
+        qList['q1'] = q1;
+        qList['q2'] = q2;
+        qList['q3'] = q3;
+        qList['q4'] = q4;
+        qList['q5'] = q5;
+        qList['q6'] = q6;
+        qList['q7'] = q7;
+        qList['q8'] = q8;
+        qList['q9'] = q9;
+        qList['q10'] = q10;
+
 
         // Populate the data set for charting
 	    var store = null;
@@ -203,11 +208,11 @@ var reportCard = function() {
                 break;
         }
 
-        renderReportCard(store);
+        renderReportCard(store, qList);
     }
 };
 
-function renderReportCard(store) {
+function renderReportCard(store, qList) {
     var fudgeFactor = 50; // This applies to ExtJS Pie Charts as if we get something < 10 we cannot hover & click on it
     var detailPanel = null;
     
@@ -239,13 +244,50 @@ function renderReportCard(store) {
 		    itemmousedown : function(obj) {
                 // We need to subtract the fudge factor of 50. We are using 50 as if we don't nothing appears for things < 10 in pie chart
                 //alert(obj.storeItem.data['name'] + ' spent ' + String(parseInt((obj.storeItem.data['total']) - fudgeFactor), 10) + ' seconds');
+                var questionData = null;
+                if (obj.storeItem.data['name'] === "Question One") 
+                    questionData = qList['q1'];
+                else if (obj.storeItem.data['name'] === "Question Two") 
+                    questionData = qList['q2'];
+                else if (obj.storeItem.data['name'] === "Question Three") 
+                    questionData = qList['q3'];
+                else if (obj.storeItem.data['name'] === "Question Four") 
+                    questionData = qList['q4'];
+                else if (obj.storeItem.data['name'] === "Question Five") 
+                    questionData = qList['q5'];
+                else if (obj.storeItem.data['name'] === "Question Six") 
+                    questionData = qList['q6'];
+                else if (obj.storeItem.data['name'] === "Question Seven") 
+                    questionData = qList['q7'];
+                else if (obj.storeItem.data['name'] === "Question Eight") 
+                    questionData = qList['q8'];
+                else if (obj.storeItem.data['name'] === "Question Nine") 
+                    questionData = qList['q9'];
+                else if (obj.storeItem.data['name'] === "Question Ten") 
+                    questionData = qList['q10'];
+
+                var detailedReportStore = Ext.create('Ext.data.ArrayStore', {
+                    // store configs
+                    autoDestroy: true,
+                    storeId: 'detailedQuestion',
+                    // reader configs
+                    idIndex: 0,
+                    fields: [
+                       'id',
+                       'time_spent',
+                       'time_allocated',
+                       'source'
+                    ], 
+                    data: questionData
+                });
+
                 if (detailPanel) {
                     detailPanel.close();
                 }
                 detailPanel = Ext.create('Ext.grid.Panel', {
                     id: 'results-form',
                     flex: 0.60,
-                    //store: store,
+                    store: detailedReportStore,
                     width: 700,
                     title: obj.storeItem.data['name'] + ' Breakdown Data',
                     renderTo: 'reportcard_container',
@@ -254,30 +296,31 @@ function renderReportCard(store) {
                             id       :'question',
                             text   : 'Question',
                             flex: 1,
-                            sortable : true
-                            //dataIndex: 'question'
+                            sortable : true,
+                            dataIndex: 'id'
                         },
                         {
                             text   : 'Time Spent',
                             width    : 75,
                             sortable : true,
-                            align: 'right'
-                            //dataIndex: 'growth %',
+                            align: 'right',
+                            dataIndex: 'time_spent'
                             //renderer: perc
                         },
                         {
                             text   : 'Time Allocated',
                             width    : 120,
                             sortable : true,
-                            align: 'right'
-                            //dataIndex: 'product %',
+                            align: 'right',
+                            dataIndex: 'time_allocated'
                             //renderer: perc
                         },
                         {
-                            text   : 'Answer',
+                            text   : 'Source',
                             width    : 75,
                             sortable : true,
-                            align: 'right'
+                            align: 'right',
+                            dataIndex: 'source'
                             //dataIndex: 'market %',
                             //renderer: perc
                         }
