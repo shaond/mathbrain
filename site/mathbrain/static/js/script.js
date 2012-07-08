@@ -58,7 +58,7 @@ var reportCard = function() {
     if (localStorage) {
         // Get all values who's key starts with "questions/"
         var totalTime = localStorage.getItem("total_time"); //Actually total time left on clock
-        var subject = parseInt(JSON.parse(localStorage.getItem("questions"))[0].fields.subject);
+        var subject = parseInt(JSON.parse(localStorage.getItem("questions"))[0].fields.subject, 10);
         var allocatedTime = 0; // Accounts for when we don't get exactly the question marks due to small pool of questions
 
         // Clear any recordCard calcs stored
