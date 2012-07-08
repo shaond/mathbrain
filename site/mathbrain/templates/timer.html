@@ -93,7 +93,7 @@ window.onbeforeunload = function() {
         var qid_img = $("#mbQuestionImg").attr("src");
         recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
     }   
-}
+};
 
 $(document).ready(function() {
 
@@ -112,31 +112,26 @@ $(document).ready(function() {
 
         // Check if there is q_fields_question_img already in DB
         if (localStorage) {
-	    subject = q.fields.subject; 
-            if (localStorage.getItem(q.fields.question_img)) {
-                if (parseInt(q.fields.mark) > 0) {
-                    var minutes = localStorage.getItem(q.fields.question_img).substring(0, 2);
-                    var seconds = localStorage.getItem(q.fields.question_img).substring(3, localStorage.getItem(q.fields.question_img).length);
-                    var question_time = parseInt(minutes)*60+parseInt(seconds);
-                    $("#mbQuestionTimer").countdown({until: question_time, compact: true, format: 'MS'});
-                }
+	        subject = q.fields.subject; 
+            var qnID = localStorage.getItem(q.fields.question_img);
+            if (qnID) {
+                var timeAllocSplit = qnID.split(":");
+                $("#mbQuestionTimer").countdown({until: parseInt(timeAllocSplit[0])*60+parseInt(timeAllocSplit[1]), compact: true, format: 'MS'});
             }
             else {
-                if (parseInt(q.fields.mark) > 0) {
-                    switch (parseInt(subject)) {
-                        case 2:
-                            // 2 Unit question
-                            $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                            break;
-                        case 3:
-                            // 3 Unit question
-                            $("#mbQuestionTimer").countdown({until: (120/84 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                            break;
-                        case 4:
-                            // 4 Unit question
-                            $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
-                            break;
-                    }
+                switch (parseInt(subject)) {
+                    case 2:
+                        // 2 Unit question
+                        $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                        break;
+                    case 3:
+                        // 3 Unit question
+                        $("#mbQuestionTimer").countdown({until: (120/84 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                        break;
+                    case 4:
+                        // 4 Unit question
+                        $("#mbQuestionTimer").countdown({until: (180/120 * parseInt(q.fields.mark) * 60), compact: true, format: 'MS'});
+                        break;
                 }
             }
         }
@@ -301,7 +296,7 @@ $(document).ready(function() {
         recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
 
         if (qIndex < questions.length) {
-            qIndex = qIndex + 1;
+            qIndex += 1;
             displayQuestion(questions[qIndex]);
         }
         if (qIndex === (questions.length - 1)) {
@@ -319,7 +314,7 @@ $(document).ready(function() {
         recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
 
         if (qIndex > 0) {
-            qIndex = qIndex - 1;
+            qIndex -= 1;
             displayQuestion(questions[qIndex]);
         }
         if (qIndex !== (questions.length - 1)) {
@@ -335,8 +330,7 @@ $(document).ready(function() {
         // Store the current question in localStorage
         var qid_img = $("#mbQuestionImg").attr("src");
         recordQuestionTime(qid_img.substring(1, qid_img.length), $("#mbQuestionTimer span").text());
-        // Store the 
-	localStorage.setItem('finish_exam', '1');
+	    localStorage.setItem('finish_exam', '1');
 
         // Gather all stats from questions in localStorage
         reportCard();
