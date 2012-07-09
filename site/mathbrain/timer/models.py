@@ -24,3 +24,15 @@ class Question(models.Model):
 
     class Meta:
         ordering = ['pub_date', 'num']
+
+# Model for ExamAnswer
+class Answer(models.Model):
+
+    question = models.OneToOneField('Question')
+    answer_img = models.ImageField(upload_to='answers')
+    
+    def __unicode__(self):
+        return 'Question: %s' % (self.answer_img)
+
+    class Meta:
+        ordering = ['answer_img']
